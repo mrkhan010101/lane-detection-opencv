@@ -2,12 +2,18 @@ import cv2
 import numpy as np
 
 def make_cordinates(image, parameter):
-    slope, intercept = parameter
-    y1 = image.shape[0]
-    y2 = int(y1*(3/5))
-    x1 = int((y1 - intercept)/slope)
-    x2 = int((y2 - intercept)/slope)
-    return np.array([x1, y1, x2, y2])
+    # print(parameter)
+    try:
+        slope, intercept = parameter
+        y1 = image.shape[0]
+        y2 = int(y1*(3/5))
+        x1 = int((y1 - intercept)/slope)
+        x2 = int((y2 - intercept)/slope)
+        return np.array([x1, y1, x2, y2])
+    except TypeError:
+        slope, intercept = 0, 0
+
+    
 
 def combo_lines(lane_image, lines):
     left_lane = []
@@ -21,6 +27,7 @@ def combo_lines(lane_image, lines):
             left_lane.append((slope, intercept))
         else:
             right_lane.append((slope, intercept))
+
     left_avg = np.average(left_lane, axis=0)
     right_avg = np.average(right_lane, axis=0)
     left_line = make_cordinates(lane_image, left_avg)
