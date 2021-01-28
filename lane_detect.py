@@ -12,6 +12,7 @@ def make_cordinates(image, parameter):
         return np.array([x1, y1, x2, y2])
     except TypeError:
         slope, intercept = 0, 0
+       
 
     
 
@@ -38,7 +39,8 @@ def show_lines(img, lines):
     line_image = np.zeros_like(img) # creating a copy of image with arrays of 0
     if lines is not None:
         for line in lines:
-            x1, y1, x2, y2 = line.reshape(4) # spliting 4 array element
+            print(line)
+            x1, y1, x2, y2 = line[0] # spliting 4 array element
             cv2.line(line_image, (x1, y1), (x2, y2), (255, 0, 0), 10)
     return line_image
 
@@ -83,11 +85,12 @@ def for_video():
         aoi = area_of_interest(edges)
         lines = cv2.HoughLinesP(aoi, 2, np.pi/180, 100, np.array([]), 40, 5)
         avg_lines = combo_lines(frame, lines)
-        clines = show_lines(frame, avg_lines)
+        clines = show_lines(frame, lines)
         color_image_line = cv2.addWeighted(frame, 0.8, clines, 1, 1)
         res = cv2.resize(color_image_line, (1280, 640))
         cv2.imshow('Window', res) # to show the output
-        cv2.waitKey(40) # to quit press q
+        if cv2.waitKey(40) == 27:
+            break # to quit press q
         
 
 
