@@ -39,6 +39,7 @@ def show_lines(img, lines):
     line_image = np.zeros_like(img) # creating a copy of image with arrays of 0
     if lines is not None:
         for line in lines:
+            print(line)
             x1, y1, x2, y2 = line.reshape(4) # spliting 4 array element
             cv2.line(line_image, (x1, y1), (x2, y2), (255, 0, 0), 10)
     return line_image
@@ -63,7 +64,7 @@ def capture(img):
     aoi = area_of_interest(edges)
     lines = cv2.HoughLinesP(aoi, 2, np.pi/180, 100, np.array([]), 40, 5)
     avg_lines = combo_lines(lane_image, lines)
-    clines = show_lines(lane_image, avg_lines)
+    clines = show_lines(lane_image, lines)
     color_image_line = cv2.addWeighted(lane_image, 0.8, clines, 1, 1) # to merge the output with the color image
     
     res = cv2.resize(color_image_line, (1280, 640)) # to resize the window
