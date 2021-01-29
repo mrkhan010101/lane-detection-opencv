@@ -81,7 +81,9 @@ def for_video():
     cap = cv2.VideoCapture('test2.mp4')
     while cap.isOpened():
         _, frame = cap.read()
-        edges = cv2.Canny(frame, 50, 150) # to find the edges
+        gray = cv2.cvtColor(frame, cv2.COLOR_RGB2GRAY) # to convert the color from RGB to BW
+        blur = cv2.GaussianBlur(gray, (5, 5), 0)
+        edges = cv2.Canny(blur, 50, 150) # to find the edges
         aoi = area_of_interest(edges)
         lines = cv2.HoughLinesP(aoi, 2, np.pi/180, 100, np.array([]), 40, 5)
         avg_lines = combo_lines(frame, lines)
@@ -89,7 +91,7 @@ def for_video():
         color_image_line = cv2.addWeighted(frame, 0.8, clines, 1, 1)
         res = cv2.resize(color_image_line, (1280, 640))
         cv2.imshow('Window', res) # to show the output
-        if cv2.waitKey(40) == 27:
+        if cv2.waitKey(10) & 0xFF == ord('q'):
             break # to quit press q
         
 

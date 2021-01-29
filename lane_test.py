@@ -11,10 +11,7 @@ def make_cordinates(image, parameter):
         x2 = int((y2 - intercept)/slope)
         return np.array([x1, y1, x2, y2])
     except TypeError:
-        slope, intercept = 0, 0
-       
-
-    
+        pass
 
 def combo_lines(lane_image, lines):
     left_lane = []
@@ -49,7 +46,7 @@ def area_of_interest(img):
     ht = img.shape[0]
     # Co-ordinates of viewing triangele
     triangle = np.array([
-        [(10, ht), (1440, ht), (546, 256)]
+        [(10, ht), (1270, ht), (546, 256)]
     ])
     mask = np.zeros_like(img) # creating a copy of image with arrays of 0
     cv2.fillPoly(mask, triangle, 255) # function that create polygons of visible region
@@ -63,8 +60,8 @@ def capture(img):
     edges = cv2.Canny(blur, 50, 150) # to find the edges
     aoi = area_of_interest(edges)
     lines = cv2.HoughLinesP(aoi, 2, np.pi/180, 100, np.array([]), 40, 5)
-    # avg_lines = combo_lines(lane_image, lines)
-    clines = show_lines(lane_image, lines)
+    avg_lines = combo_lines(lane_image, lines)
+    clines = show_lines(lane_image, avg_lines)
     color_image_line = cv2.addWeighted(lane_image, 0.8, clines, 1, 1) # to merge the output with the color image
     
     res = cv2.resize(color_image_line, (1280, 640)) # to resize the window
@@ -75,22 +72,28 @@ def for_image():
     res = capture(img)
     cv2.imshow('Window', res) # to show the output
     cv2.waitKey(0) # to quit press q
+    cv2.destroyAllWindows()
 
 
 def for_video():
     cap = cv2.VideoCapture('skate_park.mp4')
     while cap.isOpened():
         _, frame = cap.read()
-        edges = cv2.Canny(frame, 50, 150) # to find the edges
+        gray = cv2.cvtColor(frame, cv2.COLOR_RGB2GRAY) # to convert the color from RGB to BW
+        blur = cv2.GaussianBlur(gray, (5, 5), 0) # to reduce the noise 
+        edges = cv2.Canny(blur, 50, 150) # to find the edges
         aoi = area_of_interest(edges)
         lines = cv2.HoughLinesP(aoi, 2, np.pi/180, 100, np.array([]), 40, 5)
-        avg_lines = combo_lines(frame, lines)
+        # avg_lines = combo_lines(frame, lines)
         clines = show_lines(frame, lines)
-        color_image_line = cv2.addWeighted(frame, 0.8, clines, 1, 1)
+        color_image_line = cv2.addWeighted(frame, 0.9, clines, 1, 1)
         res = cv2.resize(color_image_line, (1280, 640))
         cv2.imshow('Window', res) # to show the output
-        if cv2.waitKey(40) == 27:
+        if cv2.waitKey(10) & 0xFF == ord('q'):
             break # to quit press q
+
+    cap.release()
+    cv2.destroyAllWindows()
         
 
 
