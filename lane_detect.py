@@ -3,15 +3,13 @@ import numpy as np
 
 def make_cordinates(image, parameter):
     # print(parameter)
-    try:
-        slope, intercept = parameter
-        y1 = image.shape[0]
-        y2 = int(y1*(3/5))
-        x1 = int((y1 - intercept)/slope)
-        x2 = int((y2 - intercept)/slope)
-        return np.array([x1, y1, x2, y2])
-    except TypeError:
-        slope, intercept = 0, 0
+    slope, intercept = parameter
+    y1 = image.shape[0]
+    y2 = int(y1*(3/5))
+    x1 = int((y1 - intercept)/slope)
+    x2 = int((y2 - intercept)/slope)
+    return np.array([x1, y1, x2, y2])
+    
        
 
     
@@ -64,7 +62,7 @@ def capture(img):
     aoi = area_of_interest(edges)
     lines = cv2.HoughLinesP(aoi, 2, np.pi/180, 100, np.array([]), 40, 5)
     avg_lines = combo_lines(lane_image, lines)
-    clines = show_lines(lane_image, lines)
+    clines = show_lines(lane_image, avg_lines)
     color_image_line = cv2.addWeighted(lane_image, 0.8, clines, 1, 1) # to merge the output with the color image
     
     res = cv2.resize(color_image_line, (1280, 640)) # to resize the window
@@ -87,8 +85,8 @@ def for_video():
         aoi = area_of_interest(edges)
         lines = cv2.HoughLinesP(aoi, 2, np.pi/180, 100, np.array([]), 40, 5)
         avg_lines = combo_lines(frame, lines)
-        clines = show_lines(frame, lines)
-        color_image_line = cv2.addWeighted(frame, 0.8, clines, 1, 1)
+        clines = show_lines(frame, avg_lines)
+        color_image_line = cv2.addWeighted(frame, 0.9, clines, 1, 1)
         res = cv2.resize(color_image_line, (1280, 640))
         cv2.imshow('Window', res) # to show the output
         if cv2.waitKey(10) & 0xFF == ord('q'):

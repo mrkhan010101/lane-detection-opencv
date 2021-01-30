@@ -3,15 +3,13 @@ import numpy as np
 
 def make_cordinates(image, parameter):
     # print(parameter)
-    try:
-        slope, intercept = parameter
-        y1 = image.shape[0]
-        y2 = int(y1*(3/5))
-        x1 = int((y1 - intercept)/slope)
-        x2 = int((y2 - intercept)/slope)
-        return np.array([x1, y1, x2, y2])
-    except TypeError:
-        pass
+    
+    slope, intercept = parameter
+    y1 = image.shape[0]
+    y2 = int(y1*(3/5))
+    x1 = int((y1 - intercept)/slope)
+    x2 = int((y2 - intercept)/slope)
+    return np.array([x1, y1, x2, y2])
 
 def combo_lines(lane_image, lines):
     left_lane = []
@@ -38,7 +36,7 @@ def show_lines(img, lines):
         for line in lines:
             # print(line)
             x1, y1, x2, y2 = line.reshape(4) # spliting 4 array element
-            cv2.line(line_image, (x1, y1), (x2, y2), (255, 0, 0), 10)
+            cv2.line(line_image, (x1, y1), (x2, y2), (0, 255, 0), 10)
     return line_image
 
 
@@ -46,7 +44,7 @@ def area_of_interest(img):
     ht = img.shape[0]
     # Co-ordinates of viewing triangele
     triangle = np.array([
-        [(10, ht), (1270, ht), (546, 256)]
+        [(0, ht), (1440, ht), (546, 256)]
     ])
     mask = np.zeros_like(img) # creating a copy of image with arrays of 0
     cv2.fillPoly(mask, triangle, 255) # function that create polygons of visible region
@@ -98,8 +96,8 @@ def for_video():
 
 
 def main():
-    # for_image()
-    for_video()
+    for_image()
+    # for_video()
     
 if __name__ == "__main__":
     main()
