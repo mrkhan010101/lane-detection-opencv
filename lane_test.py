@@ -51,6 +51,17 @@ def area_of_interest(img):
     masked_image = cv2.bitwise_and(img, mask) # it will hide other data and show only the visible part
     return masked_image
 
+def area_of_interest_video(img):
+    ht = img.shape[0]
+    # Co-ordinates of viewing triangele
+    triangle = np.array([
+        [(0, ht), (2560, ht), (720, 256)]
+    ])
+    mask = np.zeros_like(img) # creating a copy of image with arrays of 0
+    cv2.fillPoly(mask, triangle, 255) # function that create polygons of visible region
+    masked_image = cv2.bitwise_and(img, mask) # it will hide other data and show only the visible part
+    return masked_image
+
 def capture(img):
     lane_image = np.copy(img)
     gray = cv2.cvtColor(lane_image, cv2.COLOR_RGB2GRAY) # to convert the color from RGB to BW
@@ -80,9 +91,9 @@ def for_video():
         gray = cv2.cvtColor(frame, cv2.COLOR_RGB2GRAY) # to convert the color from RGB to BW
         blur = cv2.GaussianBlur(gray, (5, 5), 0) # to reduce the noise 
         edges = cv2.Canny(blur, 50, 150) # to find the edges
-        aoi = area_of_interest(edges)
+        aoi = area_of_interest_video(edges)
         lines = cv2.HoughLinesP(aoi, 2, np.pi/180, 100, np.array([]), 40, 5)
-        # avg_lines = combo_lines(frame, lines)
+        avg_lines = combo_lines(frame, lines)
         clines = show_lines(frame, lines)
         color_image_line = cv2.addWeighted(frame, 0.9, clines, 1, 1)
         res = cv2.resize(color_image_line, (1280, 640))
@@ -96,8 +107,8 @@ def for_video():
 
 
 def main():
-    for_image()
-    # for_video()
+    # for_image()
+    for_video()
     
 if __name__ == "__main__":
     main()
