@@ -27,12 +27,20 @@ def combo_lines(lane_image, lines):
         left_line = make_cordinates(lane_image, left_avg)
         right_line = make_cordinates(lane_image, right_avg)
         x1, y1, x2, y2 = left_line.reshape(4)
+        i1, j1, i2, j2 = right_line.reshape(4)
         m = y2- y1/ x2 - x1
+        m1 = j2- j1/ i2 - i1 # getting the value of slope 
         if m <0:
             print('straight')
             print(m)
         else:
             print('right')
+            print(m)
+        if m1 <0:
+            print('Left')
+            print(m)
+        else:
+            print('straight')
             print(m)
         return np.array([left_line, right_line])
     
