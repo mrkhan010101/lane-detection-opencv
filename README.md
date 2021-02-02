@@ -5,5 +5,6 @@ This is for detecting any lane in the road to identify the road map
 
 ## GOAL DIGGERS
 - Lane Detection
+- Directions Detection
 - Pedestrian and Animal Detection
 - Vehicle proximity Detection
