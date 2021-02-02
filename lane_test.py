@@ -2,8 +2,6 @@ import cv2
 import numpy as np
 
 def make_cordinates(image, parameter):
-    # print(parameter)
-    
     slope, intercept = parameter
     y1 = image.shape[0]
     y2 = int(y1*(3/5))
@@ -25,7 +23,6 @@ def combo_lines(lane_image, lines):
                 left_lane.append((slope, intercept))
             else:
                 right_lane.append((slope, intercept))
-
         left_avg = np.average(left_lane, axis=0)
         right_avg = np.average(right_lane, axis=0)
         left_line = make_cordinates(lane_image, left_avg)
@@ -38,14 +35,11 @@ def combo_lines(lane_image, lines):
         else:
             print('right')
             print(m)
-        # print(x1, y1, x2, y2)
         return np.array([left_line, right_line])
     
     except Exception as e:
         # print(e)
         slope, intercept = 0, 0
-        
-    
 
 def show_lines(img, lines):
     line_image = np.zeros_like(img) # creating a copy of image with arrays of 0
@@ -101,7 +95,6 @@ def for_image():
     cv2.waitKey(0) # to quit press q
     cv2.destroyAllWindows()
 
-
 def for_video():
     cap = cv2.VideoCapture('input.mp4')
     while cap.isOpened():
@@ -121,8 +114,6 @@ def for_video():
 
     cap.release()
     cv2.destroyAllWindows()
-        
-
 
 def main():
     # for_image()
