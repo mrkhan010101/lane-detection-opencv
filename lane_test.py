@@ -52,21 +52,7 @@ def show_lines(img, lines):
     t1, t2 = 0, 0
     try:
         for line in lines:
-            # print(line)
             x1, y1, x2, y2 = line.reshape(4) # spliting 4 array element
-            # print(x1, x2)
-            # if(t1 ==0 & t2 == 0):
-            #     t1, t2 = x1, x2
-            
-            # if(t2 < x2):
-            #     print('right')
-            #     t2 = x2
-            # elif(t2 > x2):
-            #     print('left')
-            #     t2 = x2
-            # else:
-            #     print('straight line')
-            #     t2 = x2
             cv2.line(line_image, (x1, y1), (x2, y2), (0, 255, 0), 10)
         return line_image
     except Exception:
