@@ -31,17 +31,17 @@ def combo_lines(lane_image, lines):
         m = y2- y1/ x2 - x1
         m1 = j2- j1/ i2 - i1 # getting the value of slope 
         if m <0:
-            print('straight')
+            print('Straight')
             print(m)
         else:
-            print('right')
+            print('Right')
             print(m)
         if m1 <0:
-            print('Left')
-            print(m)
+            print('Straight')
+            print(m1)
         else:
-            print('straight')
-            print(m)
+            print('Left')
+            print(m1)
         return np.array([left_line, right_line])
     
     except Exception as e:
@@ -103,7 +103,7 @@ def for_image():
     cv2.destroyAllWindows()
 
 def for_video():
-    cap = cv2.VideoCapture('input.mp4')
+    cap = cv2.VideoCapture('skate_park.mp4')
     while cap.isOpened():
         _, frame = cap.read()
         gray = cv2.cvtColor(frame, cv2.COLOR_RGB2GRAY) # to convert the color from RGB to BW
