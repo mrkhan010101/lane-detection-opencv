@@ -9,6 +9,7 @@ def make_cordinates(image, parameter):
     y2 = int(y1*(3/5))
     x1 = int((y1 - intercept)/slope)
     x2 = int((y2 - intercept)/slope)
+    # print(x1, x2, y1, y2, slope)
     return np.array([x1, y1, x2, y2])
 
 def combo_lines(lane_image, lines):
@@ -29,19 +30,43 @@ def combo_lines(lane_image, lines):
         right_avg = np.average(right_lane, axis=0)
         left_line = make_cordinates(lane_image, left_avg)
         right_line = make_cordinates(lane_image, right_avg)
+        x1, y1, x2, y2 = left_line.reshape(4)
+        m = y2- y1/ x2 - x1
+        if m <0:
+            print('straight')
+            print(m)
+        else:
+            print('right')
+            print(m)
+        # print(x1, y1, x2, y2)
         return np.array([left_line, right_line])
     
     except Exception as e:
-        print(e)
+        # print(e)
+        slope, intercept = 0, 0
         
     
 
 def show_lines(img, lines):
     line_image = np.zeros_like(img) # creating a copy of image with arrays of 0
+    t1, t2 = 0, 0
     try:
         for line in lines:
             # print(line)
             x1, y1, x2, y2 = line.reshape(4) # spliting 4 array element
+            # print(x1, x2)
+            # if(t1 ==0 & t2 == 0):
+            #     t1, t2 = x1, x2
+            
+            # if(t2 < x2):
+            #     print('right')
+            #     t2 = x2
+            # elif(t2 > x2):
+            #     print('left')
+            #     t2 = x2
+            # else:
+            #     print('straight line')
+            #     t2 = x2
             cv2.line(line_image, (x1, y1), (x2, y2), (0, 255, 0), 10)
         return line_image
     except Exception:
@@ -84,7 +109,7 @@ def capture(img):
     return res
 
 def for_image():
-    img = cv2.imread('test3.png') # to read the image file
+    img = cv2.imread('test_image.jpg') # to read the image file
     res = capture(img)
     cv2.imshow('Window', res) # to show the output
     cv2.waitKey(0) # to quit press q
@@ -92,7 +117,7 @@ def for_image():
 
 
 def for_video():
-    cap = cv2.VideoCapture('test2.mp4')
+    cap = cv2.VideoCapture('input.mp4')
     while cap.isOpened():
         _, frame = cap.read()
         gray = cv2.cvtColor(frame, cv2.COLOR_RGB2GRAY) # to convert the color from RGB to BW
@@ -104,7 +129,7 @@ def for_video():
         clines = show_lines(frame, avg_lines)
         color_image_line = cv2.addWeighted(frame, 0.9, clines, 1, 1)
         res = cv2.resize(color_image_line, (1280, 640))
-        cv2.imshow('Window', res) # to show the output
+        cv2.imshow('Window', res) # to show the outpqut
         if cv2.waitKey(10) & 0xFF == ord('q'):
             break # to quit press q
 
