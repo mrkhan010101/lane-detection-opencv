@@ -30,7 +30,9 @@ def video():
         cv2.imshow('Human Detection', res)
         if cv2.waitKey(10) & 0xFF == ord('q'):
             break
-
+    cap.release()
+    cv2.destroyAllWindows() 
+        
 def main():
     # image()
     video()
