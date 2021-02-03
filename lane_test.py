@@ -46,7 +46,7 @@ def combo_lines(lane_image, lines):
         return np.array([left_line, right_line])
     
     except Exception as e:
-        # print(e)
+        print(e)
         slope, intercept = 0, 0
 
 def show_lines(img, lines):
@@ -58,6 +58,7 @@ def show_lines(img, lines):
             cv2.line(line_image, (x1, y1), (x2, y2), (0, 255, 0), 10)
         return line_image
     except Exception:
+        
         pass
 
 def area_of_interest(img):
@@ -75,7 +76,7 @@ def area_of_interest_video(img):
     ht = img.shape[0]
     # Co-ordinates of viewing triangele
     triangle = np.array([   
-        [(0, ht), (579, ht), (580, 250)]
+        [(0, ht), (2560, ht), (546, 50)]
     ])
     mask = np.zeros_like(img) # creating a copy of image with arrays of 0
     cv2.fillPoly(mask, triangle, 255) # function that create polygons of visible region
@@ -97,14 +98,14 @@ def capture(img):
     return res
 
 def for_image():
-    img = cv2.imread('test_image.jpg') # to read the image file
+    img = cv2.imread('test3.png') # to read the image file
     res = capture(img)
     cv2.imshow('Window', res) # to show the output
     cv2.waitKey(0) # to quit press q
     cv2.destroyAllWindows()
 
 def for_video():
-    cap = cv2.VideoCapture('input.mp4')
+    cap = cv2.VideoCapture('skate_park.mp4')
     while cap.isOpened():
         _, frame = cap.read()
         gray = cv2.cvtColor(frame, cv2.COLOR_RGB2GRAY) # to convert the color from RGB to BW
