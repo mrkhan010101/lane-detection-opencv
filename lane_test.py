@@ -58,12 +58,10 @@ def show_lines(img, lines):
             cv2.line(line_image, (x1, y1), (x2, y2), (0, 255, 0), 10)
         return line_image
     except Exception:
-        
         pass
 
 def area_of_interest(img):
-    ht = img.shape[0]
-    # Co-ordinates of viewing triangele
+    ht = img.shape[0] # Co-ordinates of viewing triangele
     triangle = np.array([
         [(0, ht), (1440, ht), (546, 256)]
     ])
