@@ -33,16 +33,16 @@ def combo_lines(lane_image, lines):
         m1 = j2- j1/ i2 - i1 # getting the value of slope 
         if m < 0:
             print('Straight')
-            print(math.atan(m), "left lane")
+            print(math.tan(m), "left lane")
         else:
             print('Right')
-            print(math.atan(m), "left lane")
+            print(math.tan(m), "left lane")
         if m1 <0:
             print('Left')
-            print(math.atan(m1), "Right lane")
+            print(math.tan(m1), "Right lane")
         else:
             print('Straight')
-            print(math.atan(m1), "Right lane")
+            print(math.tan(m1), "Right lane")
         return np.array([left_line, right_line])
     
     except Exception as e:
