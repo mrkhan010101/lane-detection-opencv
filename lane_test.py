@@ -31,13 +31,13 @@ def combo_lines(lane_image, lines):
         i1, j1, i2, j2 = right_line.reshape(4)
         m = y2- y1/ x2 - x1
         m1 = j2- j1/ i2 - i1 # getting the value of slope 
-        if m < 0:
+        if math.tan(m) < 0:
             print('Straight')
             print(math.tan(m), "left lane")
         else:
             print('Right')
             print(math.tan(m), "left lane")
-        if m1 <0:
+        if math.tan(m1) <0:
             print('Left')
             print(math.tan(m1), "Right lane")
         else:
