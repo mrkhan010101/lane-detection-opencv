@@ -30,18 +30,18 @@ def combo_lines(lane_image, lines):
         i1, j1, i2, j2 = right_line.reshape(4)
         m = y2- y1/ x2 - x1
         m1 = j2- j1/ i2 - i1 # getting the value of slope 
-        if m <0:
+        if m < 0:
             print('Straight')
-            print(m)
+            print(m, "left lane")
         else:
             print('Right')
-            print(m)
+            print(m, "left lane")
         if m1 <0:
-            print('Straight')
-            print(m1)
-        else:
             print('Left')
-            print(m1)
+            print(m1, "Right lane")
+        else:
+            print('Straight')
+            print(m1, "Right lane")
         return np.array([left_line, right_line])
     
     except Exception as e:
@@ -73,8 +73,8 @@ def area_of_interest(img):
 def area_of_interest_video(img):
     ht = img.shape[0]
     # Co-ordinates of viewing triangele
-    triangle = np.array([
-        [(0, ht), (2560, ht), (720, 50)]
+    triangle = np.array([   
+        [(0, ht), (579, ht), (580, 250)]
     ])
     mask = np.zeros_like(img) # creating a copy of image with arrays of 0
     cv2.fillPoly(mask, triangle, 255) # function that create polygons of visible region
@@ -103,7 +103,7 @@ def for_image():
     cv2.destroyAllWindows()
 
 def for_video():
-    cap = cv2.VideoCapture('skate_park.mp4')
+    cap = cv2.VideoCapture('input.mp4')
     while cap.isOpened():
         _, frame = cap.read()
         gray = cv2.cvtColor(frame, cv2.COLOR_RGB2GRAY) # to convert the color from RGB to BW
