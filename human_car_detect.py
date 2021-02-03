@@ -1,8 +1,9 @@
 import cv2
 detection = cv2.CascadeClassifier('haarcascade_fullbody.xml')
 
-img = cv2.imread('image.jpg')
-def image(img):
+
+def image():
+    img = cv2.imread('image.jpg')
     human = detection.detectMultiScale(img, 1.1, 1)
     for x, y, b, h in human:
         cv2.rectangle(img, (x, y), (x+b, y+h), (0, 255, 0), 2)
@@ -14,9 +15,17 @@ def image(img):
     cv2.waitKey(0)
     cv2.destroyAllWindows()
 
+def video():
+    cap = cv2.VideoCapture('people.mp4')
+    while cap.isOpened():
+        _, frame = cap.read()
+        cv2.imshow('Human Detection', cap)
+        if cv2.waitKey(10) & 0xFF == ord('q'):
+            break
 
 def main():
-    image(img)
+    # image()
+    video()
 
 if __name__ == '__main__':
     main()
