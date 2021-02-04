@@ -51,7 +51,11 @@ def combo_lines(lane_image, lines):
 
         if l1 == 'Right' and l2 == 'Left':
             cv2.putText(lane_image, 'Straight', (26, 26), font, 0.5, (0, 255, 0), 1)
-        elif l1 == 'Straight' and l2 == 'Straight':
+        elif l1 == 'Right' and l2 == 'Straight':
+            cv2.putText(lane_image, 'Right', (26, 26), font, 0.5, (0, 255, 0), 1)
+        elif l1 == 'Straight' and l2 == 'Left':
+            cv2.putText(lane_image, 'Left', (26, 26), font, 0.5, (0, 255, 0), 1)
+        else:
             cv2.putText(lane_image, 'Straight', (26, 26), font, 0.5, (0, 255, 0), 1)
         
         return np.array([left_line, right_line])
