@@ -23,9 +23,9 @@ def video():
     cap = cv2.VideoCapture('people.mp4')
     while cap.isOpened():
         _, frame = cap.read()
-        # gray = cv2.cvtColor(frame, cv2.COLOR_RGB2GRAY)
-        # blur = cv2.GaussianBlur(gray, (5,5), 0)
-        op = human_detector(frame)
+        gray = cv2.cvtColor(frame, cv2.COLOR_RGB2GRAY)
+        blur = cv2.GaussianBlur(gray, (5,5), 0)
+        op = human_detector(blur)
         res = cv2.resize(op, (720, 480))
         cv2.imshow('Human Detection', res)
         if cv2.waitKey(10) & 0xFF == ord('q'):
