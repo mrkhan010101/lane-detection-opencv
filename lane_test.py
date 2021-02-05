@@ -117,7 +117,7 @@ def capture(img):
     return res
 
 def for_image():
-    img = cv2.imread('test3.png') # to read the image file
+    img = cv2.imread('test_image.jpg') # to read the image file
     res = capture(img)
     cv2.imshow('Window', res) # to show the output
     cv2.waitKey(0) # to quit press q
