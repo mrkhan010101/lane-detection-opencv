@@ -1,4 +1,7 @@
 import cv2
+import time
+from test import showfps
+FPS_SMOOTHING = 0.9
 
 def human_detector(img):
     detection = cv2.CascadeClassifier('haarcascade_fullbody.xml')
@@ -21,8 +24,15 @@ def image():
 
 def video():
     cap = cv2.VideoCapture('people.mp4')
+    fps = 0.0
+    prev = time.time()
     while cap.isOpened():
         _, frame = cap.read()
+        now = time.time()
+        fps = (fps*FPS_SMOOTHING + (1/(now - prev))*(1.0 - FPS_SMOOTHING))
+        prev = now
+        font = cv2.FONT_HERSHEY_DUPLEX
+        cv2.putText(frame, "fps: {:.1f}".format(fps), (26, 26), font, 0.5, (0, 255, 0), 1)
         gray = cv2.cvtColor(frame, cv2.COLOR_RGB2GRAY)
         blur = cv2.GaussianBlur(gray, (5,5), 0)
         op = human_detector(blur)
