@@ -2,7 +2,6 @@ import cv2
 import time
 from fps import showfps
 
-
 def human_detector(img):
     detection = cv2.CascadeClassifier('haarcascade_fullbody.xml')
     human = detection.detectMultiScale(img, 1.1, 1)
@@ -11,17 +10,13 @@ def human_detector(img):
         font = cv2.FONT_HERSHEY_DUPLEX
         cv2.putText(img, 'Human', (x + 6, y - 6), font, 0.5, (0, 255, 0), 1)
     return img
-
-
 def image():
     img = cv2.imread('image.jpg')
-    human_detector(img)
-    
+    human_detector(img)    
     res = cv2.resize(img, (360, 480))
     cv2.imshow('Frame', res)
     cv2.waitKey(0)
     cv2.destroyAllWindows()
-
 def video():
     cap = cv2.VideoCapture('people.mp4')
     prev = time.time()
@@ -38,10 +33,8 @@ def video():
             break
     cap.release()
     cv2.destroyAllWindows() 
-        
 def main():
     # image()
     video()
-
 if __name__ == '__main__':
     main()
