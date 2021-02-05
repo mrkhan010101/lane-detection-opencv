@@ -4,14 +4,6 @@ import math
 import time
 from fps import showfps
 
-def make_cordinates(image, parameter):
-    slope, intercept = parameter
-    y1 = image.shape[0]
-    y2 = int(y1*(3/5))
-    x1 = int((y1 - intercept)/slope)
-    x2 = int((y2 - intercept)/slope)
-    return np.array([x1, y1, x2, y2])
-
 def say_directions(left_line, right_line, lane_image):
     x1, y1, x2, y2 = left_line.reshape(4)
     i1, j1, i2, j2 = right_line.reshape(4)
@@ -45,7 +37,14 @@ def say_directions(left_line, right_line, lane_image):
         cv2.putText(lane_image, 'Left', (26, 26), font, 0.5, (0, 255, 0), 1)
     else:
         cv2.putText(lane_image, 'Straight', (26, 26), font, 0.5, (0, 255, 0), 1)
-        
+
+def make_cordinates(image, parameter):
+    slope, intercept = parameter
+    y1 = image.shape[0]
+    y2 = int(y1*(3/5))
+    x1 = int((y1 - intercept)/slope)
+    x2 = int((y2 - intercept)/slope)
+    return np.array([x1, y1, x2, y2])
 
 def combo_lines(lane_image, lines):
     left_lane = []
@@ -65,7 +64,6 @@ def combo_lines(lane_image, lines):
         left_line = make_cordinates(lane_image, left_avg)
         right_line = make_cordinates(lane_image, right_avg)
         say_directions(left_line, right_line, lane_image)
-        
         return np.array([left_line, right_line])
     
     except Exception as e:
@@ -144,7 +142,6 @@ def for_video():
         cv2.imshow('Window', res) # to show the outpqut
         if cv2.waitKey(10) & 0xFF == ord('q'):
             break # to quit press q
-
     cap.release()
     cv2.destroyAllWindows()
 
