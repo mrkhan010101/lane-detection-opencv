@@ -5,28 +5,27 @@ import time
 from fps import showfps
 
 def say_directions(left_line, right_line, lane_image):
-    x1, y1, x2, y2 = left_line.reshape(4)
-    i1, j1, i2, j2 = right_line.reshape(4)
-    m = y2- y1/ x2 - x1
-    m1 = j2- j1/ i2 - i1 # getting the value of slope 
+    m = left_line
+    m1 = right_line
+    # getting the value of slope 
     font = cv2.FONT_HERSHEY_DUPLEX
     l1 = ''
     l2 = ''
-    if math.tan(m) < 0:
-        print('Straight')
-        l1 = 'Straight'
-        print(math.tan(m), "left lane")
-    else:
+    if m < 0:
         print('Right')
         l1 = 'Right'
         print(math.tan(m), "left lane")
-    if math.tan(m1) <0:
-        print('Left')
-        l2 = 'Left'
-        print(math.tan(m1), "Right lane")
     else:
         print('Straight')
+        l1 = 'Straight'
+        print(math.tan(m), "left lane")
+    if m1 <0:
+        print('Straight')
         l2 = 'Straight'
+        print(math.tan(m1), "Right lane")
+    else:
+        print('Left')
+        l2 = 'Left'
         print(math.tan(m1), "Right lane")
 
     if l1 == 'Right' and l2 == 'Left':
@@ -63,7 +62,6 @@ def combo_lines(lane_image, lines):
         right_avg = np.average(right_lane, axis=0)
         left_line = make_cordinates(lane_image, left_avg)
         right_line = make_cordinates(lane_image, right_avg)
-        say_directions(left_line, right_line, lane_image)
         return np.array([left_line, right_line])
     
     except Exception as e:
@@ -135,7 +133,7 @@ def for_video():
         edges = cv2.Canny(blur, 50, 150) # to find the edges
         aoi = area_of_interest_video(edges)
         lines = cv2.HoughLinesP(aoi, 2, np.pi/180, 100, np.array([]), 40, 50)
-        avg_lines = combo_lines(frame, lines)
+        avg_lines= combo_lines(frame, lines)
         clines = show_lines(frame, avg_lines)
         color_image_line = cv2.addWeighted(frame, 0.9, clines, 1, 1)
         res = cv2.resize(color_image_line, (1280, 640))
