@@ -11,10 +11,8 @@ def say_directions(left_line, right_line, lane_image):
     font = cv2.FONT_HERSHEY_DUPLEX
     l1, l2 = '', ''
     if math.tan(y1/x1) < 0 and math.tan(y2/x2) < 0:
-        # cv2.putText(lane_image, 'Right', (26, 26), font, 0.5, (0, 255, 0), 1)
         l1 = 'Right'
     elif math.tan(y1/x1) > 0 and math.tan(y2/x2) > 0:
-        # cv2.putText(lane_image, 'Left', (26, 26), font, 0.5, (0, 255, 0), 1)
         l2 = 'Left'
     else:
         cv2.putText(lane_image, 'Straight', (26, 26), font, 0.5, (0, 255, 0), 1)
