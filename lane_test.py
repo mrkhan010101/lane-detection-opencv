@@ -4,6 +4,7 @@ import math
 import time
 from fps import showfps
 
+# Rapid Action in Directions
 def say_directions(left_line, right_line, lane_image):
     x1, y1 = left_line.reshape(2)
     x2, y2 = right_line.reshape(2)
