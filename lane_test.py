@@ -116,7 +116,7 @@ def for_image():
 def for_video():
     prev = time.time()
     fps = 0.0
-    cap = cv2.VideoCapture('test2.mp4')
+    cap = cv2.VideoCapture('skate_park.mp4')
     while cap.isOpened():
         _, frame = cap.read()
         prev, fps = showfps(frame, prev, fps)
