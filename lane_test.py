@@ -5,38 +5,30 @@ import time
 from fps import showfps
 
 def say_directions(left_line, right_line, lane_image):
-    m = left_line
-    m1 = right_line
-    # getting the value of slope 
+    x1, y1 = left_line.reshape(2)
+    x2, y2 = right_line.reshape(2)
+    print('%.2f'%math.tan(y1/x1), '%.2f'%math.tan(y2/x2))
     font = cv2.FONT_HERSHEY_DUPLEX
-    l1 = ''
-    l2 = ''
-    if m < 0:
-        print('Right')
+    l1, l2 = '', ''
+    if math.tan(y1/x1) < 0 and math.tan(y2/x2) < 0:
+        # cv2.putText(lane_image, 'Right', (26, 26), font, 0.5, (0, 255, 0), 1)
         l1 = 'Right'
-        print(math.tan(m), "left lane")
-    else:
-        print('Straight')
-        l1 = 'Straight'
-        print(math.tan(m), "left lane")
-    if m1 <0:
-        print('Straight')
-        l2 = 'Straight'
-        print(math.tan(m1), "Right lane")
-    else:
-        print('Left')
+    elif math.tan(y1/x1) > 0 and math.tan(y2/x2) > 0:
+        # cv2.putText(lane_image, 'Left', (26, 26), font, 0.5, (0, 255, 0), 1)
         l2 = 'Left'
-        print(math.tan(m1), "Right lane")
+    else:
+        cv2.putText(lane_image, 'Straight', (26, 26), font, 0.5, (0, 255, 0), 1)
+        l1, l2 = 'Straight', 'Straight'
 
     if l1 == 'Right' and l2 == 'Left':
         cv2.putText(lane_image, 'Straight', (26, 26), font, 0.5, (0, 255, 0), 1)
-    elif l1 == 'Right' and l2 == 'Straight':
-        cv2.putText(lane_image, 'Right', (26, 26), font, 0.5, (0, 255, 0), 1)
-    elif l1 == 'Straight' and l2 == 'Left':
-        cv2.putText(lane_image, 'Left', (26, 26), font, 0.5, (0, 255, 0), 1)
-    else:
+    elif l1 == 'Straight' and l2 == 'Straight':
         cv2.putText(lane_image, 'Straight', (26, 26), font, 0.5, (0, 255, 0), 1)
-
+    elif l1 == 'Straight' or l1 == '' and l2 == 'Left':
+        cv2.putText(lane_image, 'Left', (26, 26), font, 0.5, (0, 255, 0), 1)
+    elif l1 == 'Right' and l2 == '' or l2 == 'Straight':
+        cv2.putText(lane_image, 'Right', (26, 26), font, 0.5, (0, 255, 0), 1)
+        
 def make_cordinates(image, parameter):
     slope, intercept = parameter
     y1 = image.shape[0]
@@ -62,6 +54,7 @@ def combo_lines(lane_image, lines):
         right_avg = np.average(right_lane, axis=0)
         left_line = make_cordinates(lane_image, left_avg)
         right_line = make_cordinates(lane_image, right_avg)
+        say_directions(left_avg, right_avg, lane_image)
         return np.array([left_line, right_line])
     
     except Exception as e:
@@ -110,7 +103,6 @@ def capture(img):
     avg_lines = combo_lines(lane_image, lines)
     clines = show_lines(lane_image, avg_lines)
     color_image_line = cv2.addWeighted(lane_image, 0.8, clines, 1, 1) # to merge the output with the color image
-    
     res = cv2.resize(color_image_line, (1280, 640)) # to resize the window
     return res
 
@@ -124,7 +116,7 @@ def for_image():
 def for_video():
     prev = time.time()
     fps = 0.0
-    cap = cv2.VideoCapture('skate_park.mp4')
+    cap = cv2.VideoCapture('test2.mp4')
     while cap.isOpened():
         _, frame = cap.read()
         prev, fps = showfps(frame, prev, fps)
@@ -142,10 +134,8 @@ def for_video():
             break # to quit press q
     cap.release()
     cv2.destroyAllWindows()
-
 def main():
     # for_image()
     for_video()
-    
 if __name__ == "__main__":
     main()
