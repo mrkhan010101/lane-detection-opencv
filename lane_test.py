@@ -35,7 +35,6 @@ def make_cordinates(image, parameter):
     x1 = int((y1 - intercept)/slope)
     x2 = int((y2 - intercept)/slope)
     return np.array([x1, y1, x2, y2])
-
 def combo_lines(lane_image, lines):
     left_lane = []
     right_lane = []
@@ -55,11 +54,9 @@ def combo_lines(lane_image, lines):
         right_line = make_cordinates(lane_image, right_avg)
         say_directions(left_avg, right_avg, lane_image)
         return np.array([left_line, right_line])
-    
     except Exception as e:
         print(e)
         slope, intercept = 0, 0
-
 def show_lines(img, lines):
     line_image = np.zeros_like(img) # creating a copy of image with arrays of 0
     t1, t2 = 0, 0
@@ -70,7 +67,6 @@ def show_lines(img, lines):
         return line_image
     except Exception:
         pass
-
 def area_of_interest(img):
     ht = img.shape[0] # Co-ordinates of viewing triangele
     triangle = np.array([
