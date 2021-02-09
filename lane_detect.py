@@ -5,38 +5,27 @@ import time
 from fps import showfps
 
 def say_directions(left_line, right_line, lane_image):
-    x1, y1, x2, y2 = left_line.reshape(4)
-    i1, j1, i2, j2 = right_line.reshape(4)
-    m = y2- y1/ x2 - x1
-    m1 = j2- j1/ i2 - i1 # getting the value of slope 
+    x1, y1 = left_line.reshape(2)
+    x2, y2 = right_line.reshape(2)
+    print('%.2f'%math.tan(y1/x1), '%.2f'%math.tan(y2/x2))
     font = cv2.FONT_HERSHEY_DUPLEX
-    l1 = ''
-    l2 = ''
-    if math.tan(m) < 0:
-        print('Straight')
-        l1 = 'Straight'
-        print(math.tan(m), "left lane")
-    else:
-        print('Right')
+    l1, l2 = '', ''
+    if math.tan(y1/x1) < 0 and math.tan(y2/x2) < 0:
         l1 = 'Right'
-        print(math.tan(m), "left lane")
-    if math.tan(m1) <0:
-        print('Left')
+    elif math.tan(y1/x1) > 0 and math.tan(y2/x2) > 0:
         l2 = 'Left'
-        print(math.tan(m1), "Right lane")
     else:
-        print('Straight')
-        l2 = 'Straight'
-        print(math.tan(m1), "Right lane")
+        cv2.putText(lane_image, 'Straight', (26, 26), font, 0.5, (0, 255, 0), 1)
+        l1, l2 = 'Straight', 'Straight'
 
     if l1 == 'Right' and l2 == 'Left':
         cv2.putText(lane_image, 'Straight', (26, 26), font, 0.5, (0, 255, 0), 1)
-    elif l1 == 'Right' and l2 == 'Straight':
-        cv2.putText(lane_image, 'Right', (26, 26), font, 0.5, (0, 255, 0), 1)
-    elif l1 == 'Straight' and l2 == 'Left':
-        cv2.putText(lane_image, 'Left', (26, 26), font, 0.5, (0, 255, 0), 1)
-    else:
+    elif l1 == 'Straight' and l2 == 'Straight':
         cv2.putText(lane_image, 'Straight', (26, 26), font, 0.5, (0, 255, 0), 1)
+    elif l1 == 'Straight' or l1 == '' and l2 == 'Left':
+        cv2.putText(lane_image, 'Left', (26, 26), font, 0.5, (0, 255, 0), 1)
+    elif l1 == 'Right' and l2 == '' or l2 == 'Straight':
+        cv2.putText(lane_image, 'Right', (26, 26), font, 0.5, (0, 255, 0), 1)
 
 def make_cordinates(image, parameter):
     slope, intercept = parameter
@@ -63,7 +52,7 @@ def combo_lines(lane_image, lines):
         right_avg = np.average(right_lane, axis=0)
         left_line = make_cordinates(lane_image, left_avg)
         right_line = make_cordinates(lane_image, right_avg)
-        say_directions(left_line, right_line, lane_image)
+        say_directions(left_avg, right_avg, lane_image)
         return np.array([left_line, right_line])
     
     except Exception as e:
