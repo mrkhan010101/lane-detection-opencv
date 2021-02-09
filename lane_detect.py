@@ -106,7 +106,7 @@ def capture(img):
     return res
 
 def for_image():
-    img = cv2.imread('test_image.jpg') # to read the image file
+    img = cv2.imread('./test_image.jpg') # to read the image file
     res = capture(img)
     cv2.imshow('Window', res) # to show the output
     cv2.waitKey(0) # to quit press q
@@ -115,7 +115,7 @@ def for_image():
 def for_video():
     prev = time.time()
     fps = 0.0
-    cap = cv2.VideoCapture('skate_park.mp4')
+    cap = cv2.VideoCapture('./skate_park.mp4')
     while cap.isOpened():
         _, frame = cap.read()
         prev, fps = showfps(frame, prev, fps)
