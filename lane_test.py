@@ -56,10 +56,9 @@ def combo_lines(lane_image, lines):
         return np.array([left_line, right_line])
     except Exception as e:
         print(e)
-        slope, intercept = 0, 0
 def show_lines(img, lines):
     line_image = np.zeros_like(img) # creating a copy of image with arrays of 0
-    t1, t2 = 0, 0
+
     try:
         for line in lines:
             x1, y1, x2, y2 = line.reshape(4) # spliting 4 array element
@@ -70,7 +69,7 @@ def show_lines(img, lines):
 def area_of_interest(img):
     ht = img.shape[0] # Co-ordinates of viewing triangele
     triangle = np.array([
-        [(0, ht), (1440, ht), (546, 256)]
+        [(200, ht), (1200, ht), (645, 400)]
     ])
     mask = np.zeros_like(img) # creating a copy of image with arrays of 0
     cv2.fillPoly(mask, triangle, 255) # function that create polygons of visible region
@@ -81,7 +80,7 @@ def area_of_interest_video(img):
     ht = img.shape[0]
     # Co-ordinates of viewing triangele
     triangle = np.array([   
-        [(0, ht), (2560, ht), (546, 50)]
+        [(0, ht), (1110, ht), (410, 400)]
     ])
     mask = np.zeros_like(img) # creating a copy of image with arrays of 0
     cv2.fillPoly(mask, triangle, 255) # function that create polygons of visible region
@@ -102,7 +101,7 @@ def capture(img):
     return res
 
 def for_image():
-    img = cv2.imread('test_image.jpg') # to read the image file
+    img = cv2.imread('test_images/straight_lines1.jpg') # to read the image file
     res = capture(img)
     cv2.imshow('Window', res) # to show the output
     cv2.waitKey(0) # to quit press q
@@ -111,7 +110,7 @@ def for_image():
 def for_video():
     prev = time.time()
     fps = 0.0
-    cap = cv2.VideoCapture('skate_park.mp4')
+    cap = cv2.VideoCapture('challenge_video.mp4')
     while cap.isOpened():
         _, frame = cap.read()
         prev, fps = showfps(frame, prev, fps)
@@ -130,7 +129,7 @@ def for_video():
     cap.release()
     cv2.destroyAllWindows()
 def main():
-    # for_image()
-    for_video()
+    for_image()
+    # for_video()
 if __name__ == "__main__":
     main()
