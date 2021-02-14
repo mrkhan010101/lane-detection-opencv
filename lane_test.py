@@ -58,13 +58,12 @@ def combo_lines(lane_image, lines):
         print(e)
 def show_lines(img, lines):
     line_image = np.zeros_like(img) # creating a copy of image with arrays of 0
-
     try:
         for line in lines:
             x1, y1, x2, y2 = line.reshape(4) # spliting 4 array element
             # pts= np.array([[x1, y1], [x2, y2]])
             # pts = pts.reshape((-1, 1, 2)) 
-            # cv2.polylines(line_image, [pts], False, (0, 255, 0), 10)
+            # # cv2.polylines(line_image, [pts], False, (0, 255, 0), 10)
             cv2.line(line_image, (x1, y1), (x2, y2), (0, 255, 0), 10)
         return line_image
     except Exception:
@@ -72,7 +71,7 @@ def show_lines(img, lines):
 def area_of_interest(img):
     ht = img.shape[0] # Co-ordinates of viewing triangele
     triangle = np.array([
-        [(200, ht), (1200, ht), (645, 400)]
+        [(200, 590), (1200, 590), (645, 420)]
     ])
     mask = np.zeros_like(img) # creating a copy of image with arrays of 0
     cv2.fillPoly(mask, triangle, 255) # function that create polygons of visible region
@@ -82,8 +81,8 @@ def area_of_interest(img):
 def area_of_interest_video(img):
     ht = img.shape[0]
     # Co-ordinates of viewing triangele
-    triangle = np.array([   
-        [(0, ht), (1280, ht), (645, 400)]
+    triangle = np.array([
+        [(250, 590), (1280, 590), (645, 200)]
     ])
     mask = np.zeros_like(img) # creating a copy of image with arrays of 0
     cv2.fillPoly(mask, triangle, 255) # function that create polygons of visible region
@@ -132,7 +131,7 @@ def for_video():
     cap.release()
     cv2.destroyAllWindows()
 def main():
-    # for_image()
-    for_video()
+    for_image()
+    # for_video()
 if __name__ == "__main__":
     main()
