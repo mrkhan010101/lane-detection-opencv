@@ -71,7 +71,7 @@ def show_lines(img, lines):
 def area_of_interest(img):
     ht = img.shape[0] # Co-ordinates of viewing triangele
     triangle = np.array([
-        [(200, 590), (1200, 590), (645, 420)]
+        [(250, 590), (950, 590), (670, 350)]
     ])
     mask = np.zeros_like(img) # creating a copy of image with arrays of 0
     cv2.fillPoly(mask, triangle, 255) # function that create polygons of visible region
@@ -82,7 +82,7 @@ def area_of_interest_video(img):
     ht = img.shape[0]
     # Co-ordinates of viewing triangele
     triangle = np.array([
-        [(250, 590), (1280, 590), (645, 200)]
+        [(250, 590), (1280, 590), (670, 350)]
     ])
     mask = np.zeros_like(img) # creating a copy of image with arrays of 0
     cv2.fillPoly(mask, triangle, 255) # function that create polygons of visible region
@@ -92,10 +92,10 @@ def area_of_interest_video(img):
 def capture(img):
     lane_image = np.copy(img)
     gray = cv2.cvtColor(lane_image, cv2.COLOR_RGB2GRAY) # to convert the color from RGB to BW
-    blur = cv2.GaussianBlur(gray, (5, 5), 0) # to reduce the noise 
-    edges = cv2.Canny(blur, 50, 150) # to find the edges
+    # blur = cv2.GaussianBlur(gray, (5, 5), 0) # to reduce the noise 
+    edges = cv2.Canny(gray, 50, 150) # to find the edges
     aoi = area_of_interest(edges)
-    lines = cv2.HoughLinesP(aoi, 2, np.pi/180, 100, np.array([]), 40, 50)
+    lines = cv2.HoughLinesP(aoi, 2, np.pi/180, 100, np.array([]), 40, 5)
     avg_lines = combo_lines(lane_image, lines)
     clines = show_lines(lane_image, avg_lines)
     color_image_line = cv2.addWeighted(lane_image, 0.8, clines, 1, 1) # to merge the output with the color image
@@ -103,7 +103,7 @@ def capture(img):
     return res
 
 def for_image():
-    img = cv2.imread('test_images/straight_lines1.jpg') # to read the image file
+    img = cv2.imread('test_images/test2.jpg') # to read the image file
     res = capture(img)
     cv2.imshow('Window', res) # to show the output
     cv2.waitKey(0) # to quit press q
@@ -117,8 +117,8 @@ def for_video():
         _, frame = cap.read()
         prev, fps = showfps(frame, prev, fps)
         gray = cv2.cvtColor(frame, cv2.COLOR_RGB2GRAY) # to convert the color from RGB to BW
-        blur = cv2.GaussianBlur(gray, (5, 5), 0) # to reduce the noise 
-        edges = cv2.Canny(blur, 50, 150) # to find the edges
+        # blur = cv2.GaussianBlur(gray, (5, 5), 0) # to reduce the noise 
+        edges = cv2.Canny(gray, 50, 150) # to find the edges
         aoi = area_of_interest_video(edges)
         lines = cv2.HoughLinesP(aoi, 2, np.pi/180, 100, np.array([]), 40, 50)
         avg_lines= combo_lines(frame, lines)
@@ -131,7 +131,7 @@ def for_video():
     cap.release()
     cv2.destroyAllWindows()
 def main():
-    for_image()
-    # for_video()
+    # for_image()
+    for_video()
 if __name__ == "__main__":
     main()
