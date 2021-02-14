@@ -31,7 +31,7 @@ def say_directions(left_line, right_line, lane_image):
 def make_cordinates(image, parameter):
     slope, intercept = parameter
     y1 = image.shape[0]
-    y2 = int(y1*(3/5))
+    y2 = int(y1*(4/5))
     x1 = int((y1 - intercept)/slope)
     x2 = int((y2 - intercept)/slope)
     return np.array([x1, y1, x2, y2])
@@ -62,6 +62,10 @@ def show_lines(img, lines):
     try:
         for line in lines:
             x1, y1, x2, y2 = line.reshape(4) # spliting 4 array element
+            pts = np.array([
+                [x1, y1], [x2, y2]
+            ])
+            # cv2.polylines(line_image, [pts], False, (0, 255, 0), 10)
             cv2.line(line_image, (x1, y1), (x2, y2), (0, 255, 0), 10)
         return line_image
     except Exception:
@@ -101,7 +105,7 @@ def capture(img):
     return res
 
 def for_image():
-    img = cv2.imread('test_images/straight_lines1.jpg') # to read the image file
+    img = cv2.imread('test_images/test3.jpg') # to read the image file
     res = capture(img)
     cv2.imshow('Window', res) # to show the output
     cv2.waitKey(0) # to quit press q
