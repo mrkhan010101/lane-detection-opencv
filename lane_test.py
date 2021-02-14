@@ -31,7 +31,11 @@ def say_directions(left_line, right_line, lane_image):
 def make_cordinates(image, parameter):
     slope, intercept = parameter
     y1 = image.shape[0]
+<<<<<<< HEAD
     y2 = int(y1*(4/5))
+=======
+    y2 = int(y1*(3.5/5))
+>>>>>>> 312fdd97e9884be8026f86a5390f22e724cb22e1
     x1 = int((y1 - intercept)/slope)
     x2 = int((y2 - intercept)/slope)
     return np.array([x1, y1, x2, y2])
@@ -58,14 +62,19 @@ def combo_lines(lane_image, lines):
         print(e)
 def show_lines(img, lines):
     line_image = np.zeros_like(img) # creating a copy of image with arrays of 0
-
     try:
         for line in lines:
             x1, y1, x2, y2 = line.reshape(4) # spliting 4 array element
+<<<<<<< HEAD
             pts = np.array([
                 [x1, y1], [x2, y2]
             ])
             # cv2.polylines(line_image, [pts], False, (0, 255, 0), 10)
+=======
+            # pts= np.array([[x1, y1], [x2, y2]])
+            # pts = pts.reshape((-1, 1, 2)) 
+            # # cv2.polylines(line_image, [pts], False, (0, 255, 0), 10)
+>>>>>>> 312fdd97e9884be8026f86a5390f22e724cb22e1
             cv2.line(line_image, (x1, y1), (x2, y2), (0, 255, 0), 10)
         return line_image
     except Exception:
@@ -73,7 +82,7 @@ def show_lines(img, lines):
 def area_of_interest(img):
     ht = img.shape[0] # Co-ordinates of viewing triangele
     triangle = np.array([
-        [(200, ht), (1200, ht), (645, 400)]
+        [(250, 590), (950, 590), (670, 350)]
     ])
     mask = np.zeros_like(img) # creating a copy of image with arrays of 0
     cv2.fillPoly(mask, triangle, 255) # function that create polygons of visible region
@@ -83,8 +92,8 @@ def area_of_interest(img):
 def area_of_interest_video(img):
     ht = img.shape[0]
     # Co-ordinates of viewing triangele
-    triangle = np.array([   
-        [(0, ht), (1110, ht), (410, 400)]
+    triangle = np.array([
+        [(250, 590), (1280, 590), (670, 350)]
     ])
     mask = np.zeros_like(img) # creating a copy of image with arrays of 0
     cv2.fillPoly(mask, triangle, 255) # function that create polygons of visible region
@@ -94,10 +103,10 @@ def area_of_interest_video(img):
 def capture(img):
     lane_image = np.copy(img)
     gray = cv2.cvtColor(lane_image, cv2.COLOR_RGB2GRAY) # to convert the color from RGB to BW
-    blur = cv2.GaussianBlur(gray, (5, 5), 0) # to reduce the noise 
-    edges = cv2.Canny(blur, 50, 150) # to find the edges
+    # blur = cv2.GaussianBlur(gray, (5, 5), 0) # to reduce the noise 
+    edges = cv2.Canny(gray, 50, 150) # to find the edges
     aoi = area_of_interest(edges)
-    lines = cv2.HoughLinesP(aoi, 2, np.pi/180, 100, np.array([]), 40, 50)
+    lines = cv2.HoughLinesP(aoi, 2, np.pi/180, 100, np.array([]), 40, 5)
     avg_lines = combo_lines(lane_image, lines)
     clines = show_lines(lane_image, avg_lines)
     color_image_line = cv2.addWeighted(lane_image, 0.8, clines, 1, 1) # to merge the output with the color image
@@ -105,7 +114,11 @@ def capture(img):
     return res
 
 def for_image():
+<<<<<<< HEAD
     img = cv2.imread('test_images/test3.jpg') # to read the image file
+=======
+    img = cv2.imread('test_images/test2.jpg') # to read the image file
+>>>>>>> 312fdd97e9884be8026f86a5390f22e724cb22e1
     res = capture(img)
     cv2.imshow('Window', res) # to show the output
     cv2.waitKey(0) # to quit press q
@@ -119,8 +132,8 @@ def for_video():
         _, frame = cap.read()
         prev, fps = showfps(frame, prev, fps)
         gray = cv2.cvtColor(frame, cv2.COLOR_RGB2GRAY) # to convert the color from RGB to BW
-        blur = cv2.GaussianBlur(gray, (5, 5), 0) # to reduce the noise 
-        edges = cv2.Canny(blur, 50, 150) # to find the edges
+        # blur = cv2.GaussianBlur(gray, (5, 5), 0) # to reduce the noise 
+        edges = cv2.Canny(gray, 50, 150) # to find the edges
         aoi = area_of_interest_video(edges)
         lines = cv2.HoughLinesP(aoi, 2, np.pi/180, 100, np.array([]), 40, 50)
         avg_lines= combo_lines(frame, lines)
@@ -133,7 +146,7 @@ def for_video():
     cap.release()
     cv2.destroyAllWindows()
 def main():
-    for_image()
-    # for_video()
+    # for_image()
+    for_video()
 if __name__ == "__main__":
     main()

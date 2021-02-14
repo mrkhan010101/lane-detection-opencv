@@ -1,11 +1,23 @@
 import cv2
-import time
-FPS_SMOOTHING = 0.9
+import numpy as np
+import bezier as bz
 
-def showfps(frame, prev, fps): 
-    now = time.time()
-    fps = (fps*FPS_SMOOTHING + (1/(now - prev))*(1.0 - FPS_SMOOTHING))
-    # print("fps: {:.1f}".format(fps))
-    font = cv2.FONT_HERSHEY_DUPLEX
-    cv2.putText(frame, "fps: {:.1f}".format(fps), (146, 26), font, 0.5, (0, 255, 0), 1)
-    return now, fps
+img= np.zeros((512, 512, 4), np.uint8)
+points = np.array([
+    [20,155], [250, 255], [120,155]
+], np.int32)
+points1 = np.asfortranarray([
+    [20, 120, 155], [250, 155, 255], 
+])
+points = points.reshape((-1, 1, 2))
+# points1 = points1.reshape((-1, 1, 2))
+curve = bz.Curve(points1,degree= 2)
+print(curve)
+while(True):
+    
+    # lines = cv2.line(img, (20,155), (200, 155), (255,0 ,255),5)
+    ply = cv2.polylines(img, [points], False, (255,0 ,255), 10 )
+    cv2.imshow('Testing window', ply)
+    if cv2.waitKey(10) & 0xFF== ord('q'):
+        break
+cv2.destroyAllWindows()

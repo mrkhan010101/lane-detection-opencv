@@ -135,8 +135,8 @@ def for_video():
     cv2.destroyAllWindows()
 
 def main():
-    for_image()
-    # for_video()
+    # for_image()
+    for_video()
     
 if __name__ == "__main__":
     main()
