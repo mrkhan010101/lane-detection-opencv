@@ -3,6 +3,7 @@ import numpy as np
 import math
 import time
 from fps import showfps
+from showDimensions import Dimensions
 
 # Rapid Action in Directions
 def say_directions(left_line, right_line, lane_image):
@@ -117,11 +118,13 @@ def for_image():
 def for_video():
     prev = time.time()
     fps = 0.0
+    temp = 0
     cap = cv2.VideoCapture('challenge_video.mp4')
     while cap.isOpened():
         _, frame = cap.read()
         prev, fps = showfps(frame, prev, fps)
         gray = cv2.cvtColor(frame, cv2.COLOR_RGB2GRAY) # to convert the color from RGB to BW
+        temp = Dimensions(gray, temp)
         # blur = cv2.GaussianBlur(gray, (5, 5), 0) # to reduce the noise 
         edges = cv2.Canny(gray, 50, 150) # to find the edges
         aoi = area_of_interest_video(edges)
