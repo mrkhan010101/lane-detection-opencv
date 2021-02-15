@@ -8,7 +8,6 @@ cap = cv2.VideoCapture('test_images/AMU.mp4')
 prev= time.time()
 fps = 0.0
 
-
 while cap.isOpened():
     _, frame = cap.read()
     gray = cv2.cvtColor(frame, cv2.COLOR_RGB2GRAY)
