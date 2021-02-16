@@ -55,14 +55,14 @@ def combo_lines(lane_image, lines):
         left_line = make_cordinates(lane_image, left_avg)
         right_line = make_cordinates(lane_image, right_avg)
         say_directions(left_avg, right_avg, lane_image)
-        return np.array([left_line, right_line])
-    except Exception as e:
-        print(e)
+    except Exception :
+        pass
+    return np.array([left_line, right_line])
 
 def area_of_interest(img):
     ht = img.shape[0] # Co-ordinates of viewing triangele
     triangle = np.array([
-        [(250, 590), (950, 590), (670, 350)]
+        [(250, 590), (950, 590), (670, 380)]
     ])
     mask = np.zeros_like(img) # creating a copy of image with arrays of 0
     cv2.fillPoly(mask, triangle, 255) # function that create polygons of visible region
@@ -70,10 +70,9 @@ def area_of_interest(img):
     return masked_image
 
 def area_of_interest_video(img):
-    ht = img.shape[0]
-    # Co-ordinates of viewing triangele
+    ht = img.shape[0] # Co-ordinates of viewing triangele
     triangle = np.array([
-        [(250, 590), (1280, 590), (670, 360)]
+        [(250, 590), (1280, 590), (740, 350), (670, 350)]
     ])
     mask = np.zeros_like(img) # creating a copy of image with arrays of 0
     cv2.fillPoly(mask, triangle, 255) # function that create polygons of visible region
@@ -94,7 +93,6 @@ def capture(img):
     return res
 
 def for_image():
-
     img = cv2.imread('test_images/test3.jpg') # to read the image file
     res = capture(img)
     cv2.imshow('Window', res) # to show the output

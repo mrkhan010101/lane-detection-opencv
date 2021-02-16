@@ -3,6 +3,7 @@ import numpy as np
 import math
 import time
 from fps import showfps
+from showLines import show_lines
 
 def say_directions(left_line, right_line, lane_image):
     x1, y1 = left_line.reshape(2)
@@ -55,20 +56,9 @@ def combo_lines(lane_image, lines):
         say_directions(left_avg, right_avg, lane_image)
         return np.array([left_line, right_line])
     
-    except Exception as e:
-        print(e)
+    except Exception:
         slope, intercept = 0, 0
 
-def show_lines(img, lines):
-    line_image = np.zeros_like(img) # creating a copy of image with arrays of 0
-    t1, t2 = 0, 0
-    try:
-        for line in lines:
-            x1, y1, x2, y2 = line.reshape(4) # spliting 4 array element
-            cv2.line(line_image, (x1, y1), (x2, y2), (0, 255, 0), 10)
-        return line_image
-    except Exception:
-        pass
 
 def area_of_interest(img):
     ht = img.shape[0] # Co-ordinates of viewing triangele
