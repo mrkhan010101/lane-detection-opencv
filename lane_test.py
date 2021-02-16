@@ -8,27 +8,30 @@ from showLines import show_lines
 
 # Rapid Action in Directions
 def say_directions(left_line, right_line, lane_image):
-    x1, y1 = left_line.reshape(2)
-    x2, y2 = right_line.reshape(2)
-    print('%.2f'%math.tan(y1/x1), '%.2f'%math.tan(y2/x2))
-    font = cv2.FONT_HERSHEY_DUPLEX
-    l1, l2 = '', ''
-    if math.tan(y1/x1) < 0 and math.tan(y2/x2) < 0:
-        l1 = 'Right'
-    elif math.tan(y1/x1) > 0 and math.tan(y2/x2) > 0:
-        l2 = 'Left'
-    else:
-        cv2.putText(lane_image, 'Straight', (26, 26), font, 0.5, (0, 255, 0), 1)
-        l1, l2 = 'Straight', 'Straight'
+    try:
+        x1, y1 = left_line.reshape(2)
+        x2, y2 = right_line.reshape(2)
+        print('%.2f'%math.tan(y1/x1), '%.2f'%math.tan(y2/x2))
+        font = cv2.FONT_HERSHEY_DUPLEX
+        l1, l2 = '', ''
+        if math.tan(y1/x1) < 0 and math.tan(y2/x2) < 0:
+            l1 = 'Right'
+        elif math.tan(y1/x1) > 0 and math.tan(y2/x2) > 0:
+            l2 = 'Left'
+        else:
+            cv2.putText(lane_image, 'Straight', (26, 26), font, 0.5, (0, 255, 0), 1)
+            l1, l2 = 'Straight', 'Straight'
 
-    if l1 == 'Right' and l2 == 'Left':
-        cv2.putText(lane_image, 'Straight', (26, 26), font, 0.5, (0, 255, 0), 1)
-    elif l1 == 'Straight' and l2 == 'Straight':
-        cv2.putText(lane_image, 'Straight', (26, 26), font, 0.5, (0, 255, 0), 1)
-    elif l1 == 'Straight' or l1 == '' and l2 == 'Left':
-        cv2.putText(lane_image, 'Left', (26, 26), font, 0.5, (0, 255, 0), 1)
-    elif l1 == 'Right' and l2 == '' or l2 == 'Straight':
-        cv2.putText(lane_image, 'Right', (26, 26), font, 0.5, (0, 255, 0), 1)
+        if l1 == 'Right' and l2 == 'Left':
+            cv2.putText(lane_image, 'Straight', (26, 26), font, 0.5, (0, 255, 0), 1)
+        elif l1 == 'Straight' and l2 == 'Straight':
+            cv2.putText(lane_image, 'Straight', (26, 26), font, 0.5, (0, 255, 0), 1)
+        elif l1 == 'Straight' or l1 == '' and l2 == 'Left':
+            cv2.putText(lane_image, 'Left', (26, 26), font, 0.5, (0, 255, 0), 1)
+        elif l1 == 'Right' and l2 == '' or l2 == 'Straight':
+            cv2.putText(lane_image, 'Right', (26, 26), font, 0.5, (0, 255, 0), 1)
+    except Exception:
+        pass
         
 def make_cordinates(image, parameter):
     slope, intercept = parameter
@@ -38,9 +41,9 @@ def make_cordinates(image, parameter):
     x2 = int((y2 - intercept)/slope)
     return np.array([x1, y1, x2, y2])
 def combo_lines(lane_image, lines):
-    left_lane = []
-    right_lane = []
     try:
+        left_lane = []
+        right_lane = []
         for line in lines:
             x1, y1, x2, y2 = line.reshape(4)
             para = np.polyfit((x1, x2), (y1, y2), 1)
@@ -54,7 +57,7 @@ def combo_lines(lane_image, lines):
         right_avg = np.average(right_lane, axis=0)
         left_line = make_cordinates(lane_image, left_avg)
         right_line = make_cordinates(lane_image, right_avg)
-        say_directions(left_avg, right_avg, lane_image)
+        # say_directions(left_avg, right_avg, lane_image)
     except Exception :
         pass
     return np.array([left_line, right_line])
@@ -75,7 +78,7 @@ def area_of_interest(img):
 def area_of_interest_video(img):
     ht = img.shape[0] # Co-ordinates of viewing triangele
     triangle = np.array([
-        [(250, 590), (1280, 590), (740, 450), (670, 450)]
+        [(280, 590), (1280, 590), (740, 450), (670, 450)]
     ])
     mask = np.zeros_like(img) # creating a copy of image with arrays of 0
     cv2.fillPoly(mask, triangle, 255) # function that create polygons of visible region
@@ -85,8 +88,8 @@ def area_of_interest_video(img):
 def capture(img):
     lane_image = np.copy(img)
     gray = cv2.cvtColor(lane_image, cv2.COLOR_RGB2GRAY) # to convert the color from RGB to BW
-    # blur = cv2.GaussianBlur(gray, (5, 5), 0) # to reduce the noise 
-    edges = cv2.Canny(gray, 50, 150) # to find the edges
+    blur = cv2.GaussianBlur(gray, (5, 5), 0) # to reduce the noise 
+    edges = cv2.Canny(blur, 50, 150) # to find the edges
     aoi = area_of_interest(edges)
     lines = cv2.HoughLinesP(aoi, 2, np.pi/180, 100, np.array([]), 40, 5)
     avg_lines = combo_lines(lane_image, lines)
@@ -113,8 +116,8 @@ def for_video():
             prev, fps = showfps(frame, prev, fps)
             gray = cv2.cvtColor(frame, cv2.COLOR_RGB2GRAY) # to convert the color from RGB to BW
             temp = Dimensions(gray, temp)
-            # blur = cv2.GaussianBlur(gray, (5, 5), 0) # to reduce the noise 
-            edges = cv2.Canny(gray, 50, 150) # to find the edges
+            blur = cv2.GaussianBlur(gray, (5, 5), 0) # to reduce the noise 
+            edges = cv2.Canny(blur, 50, 150) # to find the edges
             aoi = area_of_interest_video(edges)
             lines = cv2.HoughLinesP(aoi, 2, np.pi/180, 100, np.array([]), 40, 50)
             avg_lines= combo_lines(frame, lines)
@@ -124,8 +127,8 @@ def for_video():
             cv2.imshow('Window', res) # to show the outpqut
             if cv2.waitKey(10) & 0xFF == ord('q'):
                 break # to quit press q
-        except Exception:
-            pass
+        except Exception as e:
+            print(e)
     cap.release()
     cv2.destroyAllWindows()
 def main():
