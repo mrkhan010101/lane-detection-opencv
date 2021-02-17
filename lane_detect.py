@@ -4,61 +4,7 @@ import math
 import time
 from fps import showfps
 from showLines import show_lines
-
-def say_directions(left_line, right_line, lane_image):
-    x1, y1 = left_line.reshape(2)
-    x2, y2 = right_line.reshape(2)
-    print('%.2f'%math.tan(y1/x1), '%.2f'%math.tan(y2/x2))
-    font = cv2.FONT_HERSHEY_DUPLEX
-    l1, l2 = '', ''
-    if math.tan(y1/x1) < 0 and math.tan(y2/x2) < 0:
-        l1 = 'Right'
-    elif math.tan(y1/x1) > 0 and math.tan(y2/x2) > 0:
-        l2 = 'Left'
-    else:
-        cv2.putText(lane_image, 'Straight', (26, 26), font, 0.5, (0, 255, 0), 1)
-        l1, l2 = 'Straight', 'Straight'
-
-    if l1 == 'Right' and l2 == 'Left':
-        cv2.putText(lane_image, 'Straight', (26, 26), font, 0.5, (0, 255, 0), 1)
-    elif l1 == 'Straight' and l2 == 'Straight':
-        cv2.putText(lane_image, 'Straight', (26, 26), font, 0.5, (0, 255, 0), 1)
-    elif l1 == 'Straight' or l1 == '' and l2 == 'Left':
-        cv2.putText(lane_image, 'Left', (26, 26), font, 0.5, (0, 255, 0), 1)
-    elif l1 == 'Right' and l2 == '' or l2 == 'Straight':
-        cv2.putText(lane_image, 'Right', (26, 26), font, 0.5, (0, 255, 0), 1)
-
-def make_cordinates(image, parameter):
-    slope, intercept = parameter
-    y1 = image.shape[0]
-    y2 = int(y1*(3/5))
-    x1 = int((y1 - intercept)/slope)
-    x2 = int((y2 - intercept)/slope)
-    return np.array([x1, y1, x2, y2])
-
-def combo_lines(lane_image, lines):
-    left_lane = []
-    right_lane = []
-    try:
-        for line in lines:
-            x1, y1, x2, y2 = line.reshape(4)
-            para = np.polyfit((x1, x2), (y1, y2), 1)
-            slope = para[0]
-            intercept = para[1]
-            if slope < 0:
-                left_lane.append((slope, intercept))
-            else:
-                right_lane.append((slope, intercept))
-        left_avg = np.average(left_lane, axis=0)
-        right_avg = np.average(right_lane, axis=0)
-        left_line = make_cordinates(lane_image, left_avg)
-        right_line = make_cordinates(lane_image, right_avg)
-        say_directions(left_avg, right_avg, lane_image)
-        return np.array([left_line, right_line])
-    
-    except Exception:
-        slope, intercept = 0, 0
-
+from show_combo_lines import combo_lines
 
 def area_of_interest(img):
     ht = img.shape[0] # Co-ordinates of viewing triangele
@@ -107,20 +53,23 @@ def for_video():
     fps = 0.0
     cap = cv2.VideoCapture('./skate_park.mp4')
     while cap.isOpened():
-        _, frame = cap.read()
-        prev, fps = showfps(frame, prev, fps)
-        gray = cv2.cvtColor(frame, cv2.COLOR_RGB2GRAY) # to convert the color from RGB to BW
-        blur = cv2.GaussianBlur(gray, (5, 5), 0) # to reduce the noise 
-        edges = cv2.Canny(blur, 50, 150) # to find the edges
-        aoi = area_of_interest_video(edges)
-        lines = cv2.HoughLinesP(aoi, 2, np.pi/180, 100, np.array([]), 40, 50)
-        avg_lines = combo_lines(frame, lines)
-        clines = show_lines(frame, avg_lines)
-        color_image_line = cv2.addWeighted(frame, 0.9, clines, 1, 1)
-        res = cv2.resize(color_image_line, (1280, 640))
-        cv2.imshow('Window', res) # to show the outpqut
-        if cv2.waitKey(10) & 0xFF == ord('q'):
-            break # to quit press q
+        try:
+            _, frame = cap.read()
+            prev, fps = showfps(frame, prev, fps)
+            gray = cv2.cvtColor(frame, cv2.COLOR_RGB2GRAY) # to convert the color from RGB to BW
+            blur = cv2.GaussianBlur(gray, (5, 5), 0) # to reduce the noise 
+            edges = cv2.Canny(blur, 50, 150) # to find the edges
+            aoi = area_of_interest_video(edges)
+            lines = cv2.HoughLinesP(aoi, 2, np.pi/180, 100, np.array([]), 40, 50)
+            avg_lines = combo_lines(frame, lines)
+            clines = show_lines(frame, avg_lines)
+            color_image_line = cv2.addWeighted(frame, 0.9, clines, 1, 1)
+            res = cv2.resize(color_image_line, (1280, 640))
+            cv2.imshow('Window', res) # to show the outpqut
+            if cv2.waitKey(10) & 0xFF == ord('q'):
+                break # to quit press q
+        except Exception:
+            pass
     cap.release()
     cv2.destroyAllWindows()
 

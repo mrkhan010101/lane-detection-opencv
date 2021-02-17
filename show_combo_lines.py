@@ -55,5 +55,5 @@ def combo_lines(lane_image, lines):
         right_line = make_cordinates(lane_image, right_avg)
         say_directions(left_avg, right_avg, lane_image)
     except Exception :
-        pass
+        slope, intercept = 0, 0
     return np.array([left_line, right_line])
