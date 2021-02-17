@@ -28,7 +28,7 @@ def make_cordinates(image, parameter):
     try:
         slope, intercept = parameter
         y1 = image.shape[0]
-        y2 = int(y1*(4/5))
+        y2 = int(y1*(3.5/5))
         x1 = int((y1 - intercept)/slope)
         x2 = int((y2 - intercept)/slope)
         return np.array([x1, y1, x2, y2])
