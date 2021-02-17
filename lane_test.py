@@ -19,7 +19,7 @@ def area_of_interest(img):
         pass
     
 def area_of_interest_video(img):
-    ht = img.shape[0] # Co-ordinates of viewing triangele
+
     triangle = np.array([
         [(280, 590), (1280, 590), (740, 350), (670, 350)]
     ])
@@ -70,8 +70,8 @@ def for_video():
             cv2.imshow('Window', res) # to show the outpqut
             if cv2.waitKey(10) & 0xFF == ord('q'):
                 break # to quit press q
-        except Exception as e:
-            print(e)
+        except Exception :
+            pass
     cap.release()
     cv2.destroyAllWindows()
 def main():

@@ -24,8 +24,6 @@ def say_directions(left_line, right_line, lane_image):
         cv2.putText(lane_image, 'Left', (26, 26), font, 0.5, (0, 255, 0), 1)
     elif l1 == 'Right' and l2 == '' or l2 == 'Straight':
         cv2.putText(lane_image, 'Right', (26, 26), font, 0.5, (0, 255, 0), 1)
-    
-        
 def make_cordinates(image, parameter):
     try:
         slope, intercept = parameter

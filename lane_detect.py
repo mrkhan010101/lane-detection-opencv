@@ -37,7 +37,6 @@ def capture(img):
     avg_lines = combo_lines(lane_image, lines)
     clines = show_lines(lane_image, avg_lines)
     color_image_line = cv2.addWeighted(lane_image, 0.8, clines, 1, 1) # to merge the output with the color image
-    
     res = cv2.resize(color_image_line, (1280, 640)) # to resize the window
     return res
 
@@ -60,7 +59,7 @@ def for_video():
             blur = cv2.GaussianBlur(gray, (5, 5), 0) # to reduce the noise 
             edges = cv2.Canny(blur, 50, 150) # to find the edges
             aoi = area_of_interest_video(edges)
-            lines = cv2.HoughLinesP(aoi, 2, np.pi/180, 100, np.array([]), 40, 50)
+            lines = cv2.HoughLinesP(aoi, 2, np.pi/180, 100, np.array([]), 40, 5)
             avg_lines = combo_lines(frame, lines)
             clines = show_lines(frame, avg_lines)
             color_image_line = cv2.addWeighted(frame, 0.9, clines, 1, 1)
