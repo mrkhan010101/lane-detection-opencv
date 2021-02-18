@@ -1,14 +1,16 @@
 import cv2
 import numpy as np
 import glob
-
+from showImageDimensions import dim
 def image():
     status = glob.glob('test_images/*.jpg')
     if(status):
         try:
             for i in status:
                 img = cv2.imread(i)
-                cv2.imshow('Debug', img)
+                x, y = dim(img)
+                res = cv2.resize(img, (x-120, y-120))
+                cv2.imshow('Debug', res)
                 cv2.waitKey(0)
                 cv2.destroyAllWindows()
         except Exception:
@@ -16,7 +18,5 @@ def image():
     else:
         print('not exist')
 
-def main():
-    image()
 if __name__ == '__main__':
-    main()
+    image()
