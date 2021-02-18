@@ -8,8 +8,9 @@ from show_combo_lines import combo_lines
 
 def area_of_interest(img):
     try:
+        ht = img.shape[0]
         triangle = np.array([
-            [(120, 590), (950, 590), (740, 400), (540, 400)]
+            [(320, 600), (1000, 600), (740, 400), (540, 400)]
         ])
         mask = np.zeros_like(img) # creating a copy of image with arrays of 0
         cv2.fillPoly(mask, triangle, 255) # function that create polygons of visible region
@@ -74,7 +75,7 @@ def for_video():
     cap.release()
     cv2.destroyAllWindows()
 def main():
-    # for_image()
-    for_video()
+    for_image()
+    # for_video()
 if __name__ == "__main__":
     main()

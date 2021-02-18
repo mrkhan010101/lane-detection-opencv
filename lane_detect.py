@@ -41,7 +41,7 @@ def capture(img):
     return res
 
 def for_image():
-    img = cv2.imread('test_images/test3.jpg') # to read the image file
+    img = cv2.imread('test_images/test5.jpg') # to read the image file
     res = capture(img)
     cv2.imshow('Window', res) # to show the output
     cv2.waitKey(0) # to quit press q
@@ -73,8 +73,8 @@ def for_video():
     cv2.destroyAllWindows()
 
 def main():
-    # for_image()
-    for_video()
+    for_image()
+    # for_video()
     
 if __name__ == "__main__":
     main()
