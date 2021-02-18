@@ -10,7 +10,7 @@ def area_of_interest(img):
     try:
         ht = img.shape[0]
         triangle = np.array([
-            [(320, 600), (1000, 600), (740, 400), (540, 400)]
+            [(420, 600), (1000, 600), (740, 400), (540, 400)]
         ])
         mask = np.zeros_like(img) # creating a copy of image with arrays of 0
         cv2.fillPoly(mask, triangle, 255) # function that create polygons of visible region
@@ -29,8 +29,10 @@ def area_of_interest_video(img):
     return masked_image
 
 def capture(img):
+    temp = 0
     lane_image = np.copy(img)
     gray = cv2.cvtColor(lane_image, cv2.COLOR_RGB2GRAY) # to convert the color from RGB to BW
+    temp = Dimensions(gray, temp)
     blur = cv2.GaussianBlur(gray, (5, 5), 0) # to reduce the noise 
     edges = cv2.Canny(blur, 50, 150) # to find the edges
     aoi = area_of_interest(edges)
@@ -42,11 +44,14 @@ def capture(img):
     return res
 
 def for_image():
-    img = cv2.imread('test_images/test3.jpg') # to read the image file
-    res = capture(img)
-    cv2.imshow('Window', res) # to show the output
-    cv2.waitKey(0) # to quit press q
-    cv2.destroyAllWindows()
+    try:
+        img = cv2.imread('test_images/test5.jpg') # to read the image file
+        res = capture(img)
+        cv2.imshow('Window', res) # to show the output
+        cv2.waitKey(0) # to quit press q
+        cv2.destroyAllWindows()
+    except Exception:
+        pass
 
 def for_video():
     prev = time.time()
