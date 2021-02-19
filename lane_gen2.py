@@ -18,7 +18,6 @@ def area_of_interest(img):
         return masked_image
     except cv2.error as e:
         print(e)
-
 def capture(img):
     lane_image = np.copy(img)
     hsv = cv2.cvtColor(lane_image, cv2.COLOR_BGR2GRAY)
@@ -33,6 +32,22 @@ def capture(img):
 def image():
     status = glob.glob('test_images/*.jpg')
     if(status):
+        for i in status:
+            try:
+                img = cv2.imread(i)
+                x, y = dim(img)
+                cap = capture(img)
+                res = cv2.resize(cap, (x-220, y-220))
+                cv2.imshow('Debug', res)
+                cv2.waitKey(0)
+                cv2.destroyAllWindows()
+            except Exception:
+                pass
+    else:
+        print('not exist')
+def video():
+    status = glob.glob('challenge_video.mp4')
+    if(status):
         try:
             for i in status:
                 img = cv2.imread(i)
@@ -44,8 +59,9 @@ def image():
                 cv2.destroyAllWindows()
         except Exception:
             pass
+        cap.release()
+        cv2.destroyAllWindows()
     else:
         print('not exist')
-
 if __name__ == '__main__':
     image()
