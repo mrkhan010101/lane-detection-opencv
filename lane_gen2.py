@@ -1,9 +1,12 @@
 import cv2
 import numpy as np
 import glob
+import time
 from showImageDimensions import dim
 from showLines import show_lines
 from show_combo_lines import combo_lines
+from fps import showfps
+from showDimensions import  dims
 
 def area_of_interest(img):
     try:
@@ -45,23 +48,45 @@ def image():
                 pass
     else:
         print('not exist')
+
+def area_of_interest_video(img):
+    triangle = np.array([
+        [(280, 590), (1280, 590), (740, 320), (540, 320)]
+    ])
+    mask = np.zeros_like(img) # creating a copy of image with arrays of 0
+    cv2.fillPoly(mask, triangle, 255) # function that create polygons of visible region
+    masked_image = cv2.bitwise_and(img, mask) # it will hide other data and show only the visible part
+    return masked_image
 def video():
     status = glob.glob('challenge_video.mp4')
     if(status):
-        try:
-            for i in status:
-                img = cv2.imread(i)
-                x, y = dim(img)
-                cap = capture(img)
-                res = cv2.resize(cap, (x-220, y-220))
-                cv2.imshow('Debug', res)
-                cv2.waitKey(0)
-                cv2.destroyAllWindows()
-        except Exception:
-            pass
+        prev = time.time()
+        fps = 0.0
+        temp = 0
+        cap = cv2.VideoCapture('challenge_video.mp4')
+        while cap.isOpened():
+            try:
+                _, frame = cap.read()
+                prev, fps = showfps(frame, prev, fps)
+                gray = cv2.cvtColor(frame, cv2.COLOR_RGB2GRAY) # to convert the color from RGB to BW
+                temp = dims(gray, temp)
+                blur = cv2.GaussianBlur(gray, (5, 5), 0) # to reduce the noise 
+                edges = cv2.Canny(blur, 50, 150) # to find the edges
+                aoi = area_of_interest_video(edges)
+                lines = cv2.HoughLinesP(aoi, 2, np.pi/180, 100, np.array([]), 40, 5)
+                avg_lines= combo_lines(frame, lines)
+                clines = show_lines(frame, avg_lines)
+                color_image_line = cv2.addWeighted(frame, 0.9, clines, 1, 1)
+                res = cv2.resize(color_image_line, (1280, 640))
+                cv2.imshow('Window', res) # to show the outpqut
+                if cv2.waitKey(10) & 0xFF == ord('q'):
+                    break # to quit press q
+            except Exception :
+                pass
         cap.release()
         cv2.destroyAllWindows()
     else:
         print('not exist')
 if __name__ == '__main__':
-    image()
+    # image()
+    video()
