@@ -20,13 +20,14 @@ def area_of_interest(img):
 
 def capture(img):
     lane_image = np.copy(img)
-    hsv = cv2.cvtColor(lane_image, cv2.COLOR_BGR2GRAY)
-    blur = cv2.GaussianBlur(hsv, (5, 5), 0)
+    hsv = cv2.cvtColor(lane_image, cv2.COLOR_BGR2HSV)
+    blur = cv2.GaussianBlur(lane_image, (5, 5), 0)
     edges = cv2.Canny(blur, 50, 150)
     aoi = area_of_interest(edges)
-    lines = cv2.HoughLinesP(aoi, 2, np.pi/180, 100, np.array([]), 40, 5)
+    lines = cv2.HoughLinesP(aoi, 2, np.pi/180, 100, np.array([]), 40, 20)
     clines = show_lines(lane_image, lines)
-    return clines
+    color_image_line = cv2.addWeighted(lane_image, 0.8, clines, 1, 1)
+    return color_image_line
 def image():
     status = glob.glob('test_images/*.jpg')
     if(status):
