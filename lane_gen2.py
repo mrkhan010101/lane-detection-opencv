@@ -50,8 +50,10 @@ def image():
         print('not exist')
 
 def area_of_interest_video(img):
+    ht = img.shape[0]
+    wt = img.shape[1]
     triangle = np.array([
-        [(280, 590), (1280, 590), (740, 320), (540, 320)]
+        [(0, ht-60), (wt, ht-60), (740, 420), (540, 420)]
     ])
     mask = np.zeros_like(img) # creating a copy of image with arrays of 0
     cv2.fillPoly(mask, triangle, 255) # function that create polygons of visible region
