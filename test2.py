@@ -5,7 +5,7 @@ import glob
 # import matplotlib.pyplot as plt
 import os.path as path
 import pickle
-
+from showImageDimensions import dim
 
 def lazy_calibration(func):
     """
@@ -104,12 +104,14 @@ if __name__ == '__main__':
 
     ret, mtx, dist, rvecs, tvecs = calibrate_camera(calib_images_dir='test_images')
 
-    img = cv2.imread('test_images/test2.jpg')
+    img = cv2.imread('test_images/calibration1.jpg')
 
     img_undistorted = undistort(img, mtx, dist)
 
     # cv2.imwrite('img/test_calibration_before.jpg', img)
     # cv2.imwrite('img/test_calibration_after.jpg', img_undistorted)
-    cv2.imshow('debug', img_undistorted)
+    x, y =dim(img_undistorted)
+    res = cv2.resize(img_undistorted, (x-120, y-120))
+    cv2.imshow('debug', res)
     cv2.waitKey(0)
     cv2.destroyAllWindows()

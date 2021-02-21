@@ -19,7 +19,7 @@ try:
 			ret, corners = cv.findChessboardCorners(gray, (7,6), None)
 			# If found, add object points, image points (after refining them)
 			objpoints.append(objp)
-			# corners2 = cv.cornerSubPix(gray,corners, (11,11), (-1,-1), criteria)
+			# corners2 = cv.cornerSubPix(gray, corners, (11,11), (-1,-1), criteria)
 			imgpoints.append(corners)# Draw and display the corners
 			cv.drawChessboardCorners(img, (7,6), corners, ret)
 			x, y = dim(img)
