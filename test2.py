@@ -2,7 +2,7 @@
 import cv2
 import numpy as np
 import glob
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 import os.path as path
 import pickle
 
@@ -59,8 +59,9 @@ def calibrate_camera(calib_images_dir, verbose=False):
 
         # Find the chessboard corners
         pattern_found, corners = cv2.findChessboardCorners(gray, (9, 6), None)
-
+        print(pattern_found)
         if pattern_found is True:
+            print('found corners')
             objpoints.append(objp)
             imgpoints.append(corners)
 
@@ -69,13 +70,14 @@ def calibrate_camera(calib_images_dir, verbose=False):
                 img = cv2.drawChessboardCorners(img, (9, 6), corners, pattern_found)
                 cv2.imshow('img',img)
                 cv2.waitKey(500)
-
+            ret, mtx, dist, rvecs, tvecs = cv2.calibrateCamera(objpoints, imgpoints, gray.shape[::-1], None, None)
+            return ret, mtx, dist, rvecs, tvecs
     if verbose:
         cv2.destroyAllWindows()
 
-    ret, mtx, dist, rvecs, tvecs = cv2.calibrateCamera(objpoints, imgpoints, gray.shape[::-1], None, None)
+    # ret, mtx, dist, rvecs, tvecs = cv2.calibrateCamera(objpoints, imgpoints, gray.shape[::-1], None, None)
 
-    return ret, mtx, dist, rvecs, tvecs
+    
 
 
 def undistort(frame, mtx, dist, verbose=False):
@@ -89,18 +91,18 @@ def undistort(frame, mtx, dist, verbose=False):
     """
     frame_undistorted = cv2.undistort(frame, mtx, dist, newCameraMatrix=mtx)
 
-    if verbose:
-        fig, ax = plt.subplots(nrows=1, ncols=2)
-        ax[0].imshow(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))
-        ax[1].imshow(cv2.cvtColor(frame_undistorted, cv2.COLOR_BGR2RGB))
-        plt.show()
+    # if verbose:
+        # fig, ax = plt.subplots(nrows=1, ncols=2)
+        # ax[0].imshow(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))
+        # ax[1].imshow(cv2.cvtColor(frame_undistorted, cv2.COLOR_BGR2RGB))
+        # plt.show()
 
     return frame_undistorted
 
 
 if __name__ == '__main__':
 
-    ret, mtx, dist, rvecs, tvecs = calibrate_camera(calib_images_dir='camera_cal')
+    ret, mtx, dist, rvecs, tvecs = calibrate_camera(calib_images_dir='test_images')
 
     img = cv2.imread('test_images/test2.jpg')
 
