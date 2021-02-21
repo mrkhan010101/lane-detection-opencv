@@ -11,7 +11,7 @@ def lazy_calibration(func):
     """
     Decorator for calibration function to avoid re-computing calibration every time.
     """
-    calibration_cache = 'camera_cal/calibration_data.pickle'
+    calibration_cache = 'calibration_data.pickle'
 
     def wrapper(*args, **kwargs):
         if path.exists(calibration_cache):
@@ -70,13 +70,13 @@ def calibrate_camera(calib_images_dir, verbose=False):
                 img = cv2.drawChessboardCorners(img, (9, 6), corners, pattern_found)
                 cv2.imshow('img',img)
                 cv2.waitKey(500)
-            ret, mtx, dist, rvecs, tvecs = cv2.calibrateCamera(objpoints, imgpoints, gray.shape[::-1], None, None)
-            return ret, mtx, dist, rvecs, tvecs
+            # ret, mtx, dist, rvecs, tvecs = cv2.calibrateCamera(objpoints, imgpoints, gray.shape[::-1], None, None)
+            
     if verbose:
         cv2.destroyAllWindows()
 
-    # ret, mtx, dist, rvecs, tvecs = cv2.calibrateCamera(objpoints, imgpoints, gray.shape[::-1], None, None)
-
+    ret, mtx, dist, rvecs, tvecs = cv2.calibrateCamera(objpoints, imgpoints, gray.shape[::-1], None, None)
+    return ret, mtx, dist, rvecs, tvecs
     
 
 
