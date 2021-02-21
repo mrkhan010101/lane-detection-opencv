@@ -1,6 +1,7 @@
 import numpy as np
 import cv2 as cv
 import glob
+from showImageDimensions import dim
 # termination criteria
 try:
 	criteria = (cv.TERM_CRITERIA_EPS + cv.TERM_CRITERIA_MAX_ITER, 30, 0.001)
@@ -12,31 +13,19 @@ try:
 	imgpoints = [] # 2d points in image plane.
 	images = glob.glob('test_images/calibration1.jpg')
 	if images:
-
 		for fname in images:
 			img = cv.imread(fname)
-			gray = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
-			# Find the chess board corners
+			gray = cv.cvtColor(img, cv.COLOR_BGR2GRAY)# Find the chess board corners
 			ret, corners = cv.findChessboardCorners(gray, (7,6), None)
 			# If found, add object points, image points (after refining them)
-			print(ret)
 			objpoints.append(objp)
 			# corners2 = cv.cornerSubPix(gray,corners, (11,11), (-1,-1), criteria)
-			imgpoints.append(corners)
-				# Draw and display the corners
+			imgpoints.append(corners)# Draw and display the corners
 			cv.drawChessboardCorners(img, (7,6), corners, ret)
-			cv.imshow('img', img)
+			x, y = dim(img)
+			res = cv.resize(img, (x-120, y-120))
+			cv.imshow('img', res)
 			cv.waitKey(0)
-			if ret is True:
-				objpoints.append(objp)
-				# corners2 = cv.cornerSubPix(gray,corners, (11,11), (-1,-1), criteria)
-				imgpoints.append(corners)
-				# Draw and display the corners
-				cv.drawChessboardCorners(img, (7,6), corners, ret)
-				cv.imshow('img', img)
-				cv.waitKey(0)
-			else:
-				print('not true')
 		cv.destroyAllWindows()
 	else:
 		print('not exist')
