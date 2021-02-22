@@ -1,33 +1,63 @@
 import numpy as np
-import cv2 as cv
+import cv2
 import glob
-from showImageDimensions import dim
-# termination criteria
-try:
-	criteria = (cv.TERM_CRITERIA_EPS + cv.TERM_CRITERIA_MAX_ITER, 30, 0.001)
-	# prepare object points, like (0,0,0), (1,0,0), (2,0,0) ....,(6,5,0)
-	objp = np.zeros((6*7,3), np.float32)
-	objp[:,:2] = np.mgrid[0:7,0:6].T.reshape(-1,2)
-	# Arrays to store object points and image points from all the images.
-	objpoints = [] # 3d point in real world space
-	imgpoints = [] # 2d points in image plane.
-	images = glob.glob('test_images/calibration1.jpg')
-	if images:
-		for fname in images:
-			img = cv.imread(fname)
-			gray = cv.cvtColor(img, cv.COLOR_BGR2GRAY)# Find the chess board corners
-			ret, corners = cv.findChessboardCorners(gray, (7,6), None)
-			# If found, add object points, image points (after refining them)
-			objpoints.append(objp)
-			# corners2 = cv.cornerSubPix(gray, corners, (11,11), (-1,-1), criteria)
-			imgpoints.append(corners)# Draw and display the corners
-			cv.drawChessboardCorners(img, (7,6), corners, ret)
-			x, y = dim(img)
-			res = cv.resize(img, (x-120, y-120))
-			cv.imshow('img', res)
-			cv.waitKey(0)
-		cv.destroyAllWindows()
-	else:
-		print('not exist')
-except Exception as e:
-	print(e)
+import matplotlib.pyplot as plt
+from calibration_utils import calibrate_camera, undistort
+from binarization_utils import binarize
+
+
+def birdeye(img, verbose=False):
+    """
+    Apply perspective transform to input frame to get the bird's eye view.
+    :param img: input color frame
+    :param verbose: if True, show the transformation result
+    :return: warped image, and both forward and backward transformation matrices
+    """
+    h, w = img.shape[:2]
+
+    src = np.float32([[w, h-10],    # br
+                      [0, h-10],    # bl
+                      [546, 460],   # tl
+                      [732, 460]])  # tr
+    dst = np.float32([[w, h],       # br
+                      [0, h],       # bl
+                      [0, 0],       # tl
+                      [w, 0]])      # tr
+
+    M = cv2.getPerspectiveTransform(src, dst)
+    Minv = cv2.getPerspectiveTransform(dst, src)
+
+    warped = cv2.warpPerspective(img, M, (w, h), flags=cv2.INTER_LINEAR)
+
+    if verbose:
+        f, axarray = plt.subplots(1, 2)
+        f.set_facecolor('white')
+        axarray[0].set_title('Before perspective transform')
+        axarray[0].imshow(img, cmap='gray')
+        for point in src:
+            axarray[0].plot(*point, '.')
+        axarray[1].set_title('After perspective transform')
+        axarray[1].imshow(warped, cmap='gray')
+        for point in dst:
+            axarray[1].plot(*point, '.')
+        for axis in axarray:
+            axis.set_axis_off()
+        plt.show()
+
+    return warped, M, Minv
+
+
+if __name__ == '__main__':
+
+    ret, mtx, dist, rvecs, tvecs = calibrate_camera(calib_images_dir='camera_cal')
+
+    # show result on test images
+    for test_img in glob.glob('test_images/*.jpg'):
+
+        img = cv2.imread(test_img)
+
+        img_undistorted = undistort(img, mtx, dist, verbose=False)
+
+        img_binary = binarize(img_undistorted, verbose=False)
+
+        img_birdeye, M, Minv = birdeye(cv2.cvtColor(img_undistorted, cv2.COLOR_BGR2RGB), verbose=True)
