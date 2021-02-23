@@ -20,8 +20,8 @@ def filter_colors(image):
 
 	# Filter yellow pixels
 	hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
-	lower_yellow = np.array([90,100,100])
-	upper_yellow = np.array([110,255,255])
+	lower_yellow = np.array([22,93,0])
+	upper_yellow = np.array([40,255,255])
 	yellow_mask = cv2.inRange(hsv, lower_yellow, upper_yellow)
 	yellow_image = cv2.bitwise_and(image, image, mask=yellow_mask)
 
@@ -92,9 +92,10 @@ def video():
             try:
                 _, frame = cap.read()
                 prev, fps = showfps(frame, prev, fps)
-                gray = cv2.cvtColor(frame, cv2.COLOR_RGB2GRAY) # to convert the color from RGB to BW
-                temp = dims(gray, temp)
-                blur = cv2.GaussianBlur(gray, (5, 5), 0) # to reduce the noise 
+                # gray = cv2.cvtColor(frame, cv2.COLOR_RGB2GRAY) # to convert the color from RGB to BW
+                hsv = filter_colors(frame)
+                temp = dims(hsv, temp)
+                blur = cv2.GaussianBlur(hsv, (5, 5), 0) # to reduce the noise 
                 edges = cv2.Canny(blur, 50, 150) # to find the edges
                 aoi = area_of_interest_video(edges)
                 lines = cv2.HoughLinesP(aoi, 2, np.pi/180, 100, np.array([]), 40, 5)
@@ -112,5 +113,5 @@ def video():
     else:
         print('not exist')
 if __name__ == '__main__':
-    image()
-    # video()
+    # image()
+    video()
