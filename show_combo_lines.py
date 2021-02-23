@@ -6,6 +6,7 @@ def say_directions(left_line, right_line, lane_image):
     try:
         x1, y1 = left_line.reshape(2)
         x2, y2 = right_line.reshape(2)
+        print(x1, y1)
         print('%.2f'%math.tan(y1/x1), '%.2f'%math.tan(y2/x2))
         font = cv2.FONT_HERSHEY_DUPLEX
         if math.tan(y1/x1) < 0 and math.tan(y2/x2) < 0:
@@ -25,7 +26,7 @@ def make_cordinates(image, parameter):
         x2 = int((y2 - intercept)/slope)
         return np.array([x1, y1, x2, y2])
     except Exception:
-        slope, intercept = 0.0, 0.0
+        slope, intercept = 0, 0
 def combo_lines(lane_image, lines):
     try:
         left_lane = []
