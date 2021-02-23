@@ -4,6 +4,8 @@ import math
 # Rapid Action in Directions
 def say_directions(left_line, right_line, lane_image):
     try:
+        print(left_line)
+        print(right_line)
         x1, y1 = left_line.reshape(2)
         x2, y2 = right_line.reshape(2)
         print('%.2f'%math.tan(y1/x1), '%.2f'%math.tan(y2/x2))
@@ -15,7 +17,7 @@ def say_directions(left_line, right_line, lane_image):
         else:
             cv2.putText(lane_image, 'Straight', (26, 26), font, 0.5, (0, 255, 0), 1)
     except Exception as e:
-        print(e)
+        print(e, 'error line')
 def make_cordinates(image, parameter):
     try:
         slope, intercept = parameter
