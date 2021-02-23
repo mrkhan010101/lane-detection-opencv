@@ -6,7 +6,7 @@ def say_directions(left_line, right_line, lane_image):
     try:
         x1, y1 = left_line.reshape(2)
         x2, y2 = right_line.reshape(2)
-        print(x1, y1)
+        # print(x1, y1)
         print('%.2f'%math.tan(y1/x1), '%.2f'%math.tan(y2/x2))
         font = cv2.FONT_HERSHEY_DUPLEX
         if math.tan(y1/x1) < 0 and math.tan(y2/x2) < 0:
