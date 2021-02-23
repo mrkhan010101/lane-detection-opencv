@@ -11,8 +11,7 @@ def show_lines(img, lines):
                 cv2.line(line_image, (x1, y1), (x2, y2), (0, 255, 0), 10)
             else:
                 cv2.line(line_image, (x1, y1), (x2, y2), (0, 255, 0), 10)
-        except Exception as e:
-            # print(e)
+        except Exception:
             pass
     return line_image
     
