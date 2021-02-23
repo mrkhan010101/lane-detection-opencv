@@ -16,9 +16,9 @@ def filter_colors(image):
 	white_image = cv2.bitwise_and(image, image, mask=white_mask)
 	# Filter yellow pixels
 	hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
-	lower_yellow = np.array([22,93,0])
+	lower_yellow = np.array([22,83,0])
 	upper_yellow = np.array([40,255,255])
-	yellow_mask = cv2.inRange(hsv, lower_yellow, upper_yellow)
+	yellow_mask = cv2.inRange(image, lower_yellow, upper_yellow)
 	yellow_image = cv2.bitwise_and(image, image, mask=yellow_mask)
 	# Combine the two above images
 	image2 = cv2.addWeighted(white_image, 1., yellow_image, 1., 0.)
@@ -47,7 +47,7 @@ def capture(img):
     avg_lines= combo_lines(lane_image, lines)
     clines = show_lines(lane_image, avg_lines)
     color_image_line = cv2.addWeighted(lane_image, 0.8, clines, 1, 1)
-    return color_image_line
+    return hsv
 def image():
     status = glob.glob('test_images/*.jpg')
     if(status):
