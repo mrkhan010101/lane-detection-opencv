@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 import time
 from fps import showfps
-from showDimensions import Dimensions
+from showDimensions import dims
 from showLines import show_lines
 from show_combo_lines import combo_lines
 
@@ -32,7 +32,7 @@ def capture(img):
     temp = 0
     lane_image = np.copy(img)
     gray = cv2.cvtColor(lane_image, cv2.COLOR_RGB2GRAY) # to convert the color from RGB to BW
-    temp = Dimensions(gray, temp)
+    temp = dims(gray, temp)
     blur = cv2.GaussianBlur(gray, (5, 5), 0) # to reduce the noise 
     edges = cv2.Canny(blur, 50, 150) # to find the edges
     aoi = area_of_interest(edges)
@@ -63,7 +63,7 @@ def for_video():
             _, frame = cap.read()
             prev, fps = showfps(frame, prev, fps)
             gray = cv2.cvtColor(frame, cv2.COLOR_RGB2GRAY) # to convert the color from RGB to BW
-            temp = Dimensions(gray, temp)
+            temp = dims(gray, temp)
             blur = cv2.GaussianBlur(gray, (5, 5), 0) # to reduce the noise 
             edges = cv2.Canny(blur, 50, 150) # to find the edges
             aoi = area_of_interest_video(edges)
@@ -80,7 +80,7 @@ def for_video():
     cap.release()
     cv2.destroyAllWindows()
 def main():
-    for_image()
-    # for_video()
+    # for_image()
+    for_video()
 if __name__ == "__main__":
     main()
