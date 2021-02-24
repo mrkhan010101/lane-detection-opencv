@@ -5,7 +5,7 @@ from fps import showfps
 from showDimensions import dims
 from showLines import show_lines
 from show_combo_lines import combo_lines
-
+from showFilters import filter_colors
 def area_of_interest(img):
     try:
         ht = img.shape[0]
@@ -32,6 +32,7 @@ def capture(img):
     temp = 0
     lane_image = np.copy(img)
     gray = cv2.cvtColor(lane_image, cv2.COLOR_RGB2GRAY) # to convert the color from RGB to BW
+    # gray = filter_colors(lane_image)
     temp = dims(gray, temp)
     blur = cv2.GaussianBlur(gray, (5, 5), 0) # to reduce the noise 
     edges = cv2.Canny(blur, 50, 150) # to find the edges
@@ -57,12 +58,13 @@ def for_video():
     prev = time.time()
     fps = 0.0
     temp = 0
-    cap = cv2.VideoCapture('challenge_video.mp4')
+    cap = cv2.VideoCapture('input.mp4')
     while cap.isOpened():
         try:
             _, frame = cap.read()
             prev, fps = showfps(frame, prev, fps)
             gray = cv2.cvtColor(frame, cv2.COLOR_RGB2GRAY) # to convert the color from RGB to BW
+            # gray = filter_colors(frame)
             temp = dims(gray, temp)
             blur = cv2.GaussianBlur(gray, (5, 5), 0) # to reduce the noise 
             edges = cv2.Canny(blur, 50, 150) # to find the edges
