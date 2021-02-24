@@ -3,8 +3,8 @@ import numpy as np
 import math
 def say_directions(left_line, right_line, lane_image):
     try:
-        print(left_line)
-        print(right_line)
+        # print(left_line)
+        # print(right_line)
         x1, y1 = left_line.reshape(2)
         x2, y2 = right_line.reshape(2)
         print('%.2f'%math.tan(y1/x1), '%.2f'%math.tan(y2/x2))
