@@ -6,7 +6,7 @@ from showImageDimensions import dim
 from showLines import show_lines
 from show_combo_lines import combo_lines
 from fps import showfps
-from showDimensions import  dims
+from showDimensions import dims
 from showFilters import filter_colors
 
 def area_of_interest(img):
@@ -61,12 +61,13 @@ def area_of_interest_video(img):
     masked_image = cv2.bitwise_and(img, mask) # it will hide other data and show only the visible part
     return masked_image
 def video():
-    status = glob.glob('challenge_video.mp4')
+    path = 'lane1_1.mp4'
+    status = glob.glob(path)
     if(status):
         prev = time.time()
         fps = 0.0
         temp = 0
-        cap = cv2.VideoCapture('challenge_video.mp4')
+        cap = cv2.VideoCapture(path)
         while cap.isOpened():
             try:
                 _, frame = cap.read()
@@ -91,5 +92,5 @@ def video():
     else:
         print('not exist')
 if __name__ == '__main__':
-    # image()
+    # image()    q
     video()
