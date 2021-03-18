@@ -30,7 +30,7 @@ def combo_lines(lane_image, lines):
         right_avg = np.average(right_lane, axis=0)
         left_line = make_cordinates(lane_image, left_avg)
         right_line = make_cordinates(lane_image, right_avg)
-        # say_directions(left_avg, right_avg, lane_image)
+        say_directions(left_avg, right_avg, lane_image)
     except Exception as e:
         # print(e)
         pass
