@@ -1,6 +1,5 @@
-import cv2
 import numpy as np
-import math
+
 # Rapid Action in Directions
 from showDirections import say_directions
 def make_cordinates(image, parameter):
