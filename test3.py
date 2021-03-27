@@ -92,5 +92,5 @@ def video():
     else:
         print('not exist')
 if __name__ == '__main__':
-    # image()
-    video()
+    image()
+    # video()

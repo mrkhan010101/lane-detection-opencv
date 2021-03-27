@@ -14,5 +14,6 @@ def say_directions(left_line, right_line, lane_image):
             cv2.putText(lane_image, 'Left', (26, 26), font, 0.5, (0, 255, 0), 1)
         else:
             cv2.putText(lane_image, 'Straight', (26, 26), font, 0.5, (0, 255, 0), 1)
-    except Exception as e:
-        print(e, 'error line')
+    except Exception:
+        m,n = np.nan_to_num(left_line.reshape(2))
+        print(m,n, "a new line")
