@@ -31,6 +31,7 @@ def capture(img):
     lines = cv2.HoughLinesP(aoi, 2, np.pi/180, 100, np.array([]), 40, 20)
     avg_lines= combo_lines(lane_image, lines)
     clines = show_lines(lane_image, avg_lines)
+    # hough_image_line = cv2.addWeighted(aoi, 0.8, clines, 1, 1)
     color_image_line = cv2.addWeighted(lane_image, 0.8, clines, 1, 1)
     return color_image_line
 def image():
