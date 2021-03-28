@@ -10,6 +10,7 @@ def show_lines(img, lines):
                     x1 = 1920
                     x2 = 1920
                     cv2.line(line_image, (x1, y1), (x2, y2), (0, 255, 0), 10)
+                    print('left line')
                 else:
                     cv2.line(line_image, (x1, y1), (x2, y2), (0, 255, 0), 10)
             except Exception:

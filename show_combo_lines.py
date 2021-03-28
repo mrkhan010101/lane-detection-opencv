@@ -19,7 +19,7 @@ def combo_lines(lane_image, lines):
         for line in lines:
             x1, y1, x2, y2 = line.reshape(4)
             para = np.polyfit((x1, x2), (y1, y2), 1)
-            print(para)
+            # print(para)
             slope = para[0]
             intercept = para[1]
             if slope < 0:
