@@ -17,6 +17,7 @@ def combo_lines(lane_image, lines):
         left_lane = []
         right_lane = []
         temp_left = np.array([ 75, 720, 466, 503])
+        temp_right = np.array([860, 720, 631, 503])
         for line in lines:
             x1, y1, x2, y2 = line.reshape(4)
             para = np.polyfit((x1, x2), (y1, y2), 1)
@@ -32,13 +33,13 @@ def combo_lines(lane_image, lines):
         left_line = make_cordinates(lane_image, left_avg)
         right_line = make_cordinates(lane_image, right_avg)
         # print(left_line,"<< left|| right>>", right_line) # it was working
-        
         if(left_line == None):
-            left_line = temp_left.copy()
-            # print(left_line)
-            # print(temp_left)
+            left_line = temp_left.copy()  
+        elif(right_line == None):
+            right_line = temp_right.copy()  
+        temp_right = right_line.copy()
         temp_left = left_line.copy()
-        # print(temp_left)
+
         # say_directions(left_avg, right_avg, lane_image)
     except Exception:
         pass

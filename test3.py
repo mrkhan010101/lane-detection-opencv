@@ -61,7 +61,7 @@ def area_of_interest_video(img):
     masked_image = cv2.bitwise_and(img, mask) # it will hide other data and show only the visible part
     return masked_image
 def video():
-    path = 'lane1_1.mp4'
+    path = 'challenge_video.mp4'
     status = glob.glob(path)
     if(status):
         prev = time.time()
