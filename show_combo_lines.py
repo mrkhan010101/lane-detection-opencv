@@ -1,5 +1,5 @@
 import numpy as np
-
+from sklearn.linear_model import LinearRegression
 # Rapid Action in Directions
 from showDirections import say_directions
 def make_cordinates(image, parameter):
@@ -30,6 +30,9 @@ def combo_lines(lane_image, lines):
         right_avg = np.average(right_lane, axis=0)
         left_line = make_cordinates(lane_image, left_avg)
         right_line = make_cordinates(lane_image, right_avg)
+        print(left_line,"<< left|| right>>", right_line) # it was working
+        # if(left_line == None):
+        #     print('left was none') # it was working
         # say_directions(left_avg, right_avg, lane_image)
     except Exception:
         pass
