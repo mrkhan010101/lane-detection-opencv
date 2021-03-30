@@ -34,13 +34,9 @@ def combo_lines(lane_image, lines):
         right_line = make_cordinates(lane_image, right_avg)
         # print(left_line,"<< left|| right>>", right_line) # it was working
         if(left_line == None):
-            left_line = temp_left.copy()  
-        elif(right_line == None):
-            right_line = temp_right.copy()  
-        temp_right = right_line.copy()
+            left_line = temp_left.copy()
         temp_left = left_line.copy()
-
         # say_directions(left_avg, right_avg, lane_image)
-    except Exception:
-        pass
+    except Exception as e:
+        print(e)
     return np.array([left_line, right_line])
