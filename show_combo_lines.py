@@ -36,9 +36,9 @@ def make_cordinates(image, parameter):
         y2 = int(y1*(3.5/5))
         x1 = int((y1 - intercept)/slope)
         x2 = int((y2 - intercept)/slope)
-        return np.array([x1, y1, x2, y2])
     except Exception:
-        slope, intercept = 0.0, 0.0
+        slope, intercept = 0, 0
+    return np.array([x1, y1, x2, y2])
 def combo_lines(lane_image, lines):
     try:
         left_lane = []

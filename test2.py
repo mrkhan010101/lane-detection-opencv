@@ -49,7 +49,7 @@ def calibrate_camera(calib_images_dir, verbose=False):
     imgpoints = []  # 2d points in image plane.
 
     # Make a list of calibration images
-    images = glob.glob(path.join(calib_images_dir, 'calibration*.jpg'))
+    images = glob.glob(path.join(calib_images_dir, 'test*.jpg'))
 
     # Step through the list and search for chessboard corners
     for filename in images:
@@ -100,14 +100,14 @@ def undistort(frame, mtx, dist, verbose=False):
 
 if __name__ == '__main__':
 
-    ret, mtx, dist, rvecs, tvecs = calibrate_camera(calib_images_dir='camera_cal')
+    ret, mtx, dist, rvecs, tvecs = calibrate_camera(calib_images_dir='test_images')
 
     img = cv2.imread('test_images/test2.jpg')
 
     img_undistorted = undistort(img, mtx, dist)
 
-    # cv2.imwrite('img/test_calibration_before.jpg', img)
-    # cv2.imwrite('img/test_calibration_after.jpg', img_undistorted)
+    cv2.imwrite('img/test_calibration_before.jpg', img)
+    cv2.imwrite('img/test_calibration_after.jpg', img_undistorted)
     cv2.imshow('debug', img_undistorted)
     cv2.waitKey(0)
     cv2.destroyAllWindows()
