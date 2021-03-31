@@ -8,7 +8,6 @@ from show_combo_lines import combo_lines
 from fps import showfps
 from showDimensions import dims
 from showFilters import filter_colors
-
 def area_of_interest(img):
     try:
         ht = img.shape[0]
@@ -92,5 +91,5 @@ def video():
     else:
         print('not exist')
 if __name__ == '__main__':
-    # image()
-    video()
+    image()
+    # video()
