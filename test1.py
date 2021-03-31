@@ -1,46 +1,63 @@
-# Python program to explain 
-# cv2.polylines() method 
-
-import cv2 
 import numpy as np
-from numpy.core.numerictypes import ScalarType 
+import cv2
+import glob
+import matplotlib.pyplot as plt
+from calibration_utils import calibrate_camera, undistort
+from binarization_utils import binarize
 
 
-# Reading an image in default 
-# mode 
-image = np.zeros((512,512,4),np.uint8) 
+def birdeye(img, verbose=False):
+    """
+    Apply perspective transform to input frame to get the bird's eye view.
+    :param img: input color frame
+    :param verbose: if True, show the transformation result
+    :return: warped image, and both forward and backward transformation matrices
+    """
+    h, w = img.shape[:2]
 
-# Window name in which image is 
-# displayed 
-window_name = 'Image'
+    src = np.float32([[w, h-10],    # br
+                      [0, h-10],    # bl
+                      [546, 460],   # tl
+                      [732, 460]])  # tr
+    dst = np.float32([[w, h],       # br
+                      [0, h],       # bl
+                      [0, 0],       # tl
+                      [w, 0]])      # tr
 
-# Polygon corner points coordinates 
-pts = np.array([[25, 70], [25, 160], 
-				[110, 200], [200, 160], 
-				[200, 70], [110, 20]], 
-			np.int32) 
+    M = cv2.getPerspectiveTransform(src, dst)
+    Minv = cv2.getPerspectiveTransform(dst, src)
 
-pts = pts.reshape((-1, 1, 2)) 
+    warped = cv2.warpPerspective(img, M, (w, h), flags=cv2.INTER_LINEAR)
 
-isClosed = True
+    if verbose:
+        f, axarray = plt.subplots(1, 2)
+        f.set_facecolor('white')
+        axarray[0].set_title('Before perspective transform')
+        axarray[0].imshow(img, cmap='gray')
+        for point in src:
+            axarray[0].plot(*point, '.')
+        axarray[1].set_title('After perspective transform')
+        axarray[1].imshow(warped, cmap='gray')
+        for point in dst:
+            axarray[1].plot(*point, '.')
+        for axis in axarray:
+            axis.set_axis_off()
+        plt.show()
 
-# Blue color in BGR 
-color = (255, 0, 0) 
+    return warped, M, Minv
 
-# Line thickness of 2 px 
-thickness = 2
 
-# Using cv2.polylines() method 
-# Draw a Blue polygon with 
-# thickness of 1 px 
-image = cv2.polylines(image, [pts], 
-					False, color, thickness, lineType= cv2.arcLength(curve= cv2.LINE_AA, closed= False)) 
+if __name__ == '__main__':
 
-# Displaying the image 
-while(1): 
-	
-	cv2.imshow('image', image) 
-	if cv2.waitKey(20) & 0xFF == ord('q'): 
-		break
-		
-cv2.destroyAllWindows() 
+    ret, mtx, dist, rvecs, tvecs = calibrate_camera(calib_images_dir='camera_cal')
+
+    # show result on test images
+    for test_img in glob.glob('test_images/*.jpg'):
+
+        img = cv2.imread(test_img)
+
+        img_undistorted = undistort(img, mtx, dist, verbose=False)
+
+        img_binary = binarize(img_undistorted, verbose=False)
+
+        img_birdeye, M, Minv = birdeye(cv2.cvtColor(img_undistorted, cv2.COLOR_BGR2RGB), verbose=True)
