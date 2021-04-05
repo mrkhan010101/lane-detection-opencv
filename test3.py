@@ -32,7 +32,7 @@ def capture(img):
     # avg_lines= combo_lines(lane_image, lines)
     clines = show_lines(lane_image, lines)
     color_image_line = cv2.addWeighted(lane_image, 0.8, clines, 1, 1)
-    return hsv
+    return aoi
 def image():
     status = glob.glob('test_images/*.jpg')
     if(status):

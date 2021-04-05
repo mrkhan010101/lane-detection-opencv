@@ -10,7 +10,7 @@ def filter_colors(image):
 	# Filter yellow pixels
 	hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HLS)
 	lower_yellow = np.array([15, 38, 115], dtype=np.uint8)
-	upper_yellow = np.array([40,255,255], dtype=np.uint8)
+	upper_yellow = np.array([35, 204, 255], dtype=np.uint8)
 	yellow_mask = cv2.inRange(hsv, lower_yellow, upper_yellow)
 	yellow_image = cv2.bitwise_and(image, image, mask=yellow_mask)
 	# Combine the two above images
