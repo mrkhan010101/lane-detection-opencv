@@ -31,20 +31,18 @@ def combo_lines(lane_image, lines):
             else:
                 right_lane.append((slope, intercept))
         left_avg = np.average(left_lane, axis=0)
-        print(left_avg, 'left')
         right_avg = np.average(right_lane, axis=0)
         left_line = make_cordinates(lane_image, left_avg)
         right_line = make_cordinates(lane_image, right_avg)
-        print(left_line,"<< left|| right>>", right_line) # it was working
+        # print(left_line,"<< left|| right>>", right_line) # it was working
         # say_directions(left_avg, right_avg, lane_image)
         if(left_line == None):
             left_line = temp_left.copy()
+            print('it was none')
         else:
             temp_left = left_line.copy()
         
     except Exception as e:
-        # temp_left = np.array([ 75, 720, 466, 503])
-        # left_line = temp_left.copy()
-        # print(e)
-        pass
+        print(e)
+        # pass
     return np.array([left_line, right_line])

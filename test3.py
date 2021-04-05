@@ -23,6 +23,7 @@ def area_of_interest(img):
         print(e)
 def capture(img):
     lane_image = np.copy(img)
+    # tmp_hsv = cv2.cvtColor(lane_image, cv2.COLOR_BGR2HLS)
     hsv = filter_colors(lane_image)
     blur = cv2.GaussianBlur(hsv, (5, 5), 0)
     edges = cv2.Canny(blur, 50, 150)
@@ -31,7 +32,7 @@ def capture(img):
     # avg_lines= combo_lines(lane_image, lines)
     clines = show_lines(lane_image, lines)
     color_image_line = cv2.addWeighted(lane_image, 0.8, clines, 1, 1)
-    return color_image_line
+    return hsv
 def image():
     status = glob.glob('test_images/*.jpg')
     if(status):
@@ -91,5 +92,5 @@ def video():
     else:
         print('not exist')
 if __name__ == '__main__':
-    # image()
-    video()
+    image()
+    # video()
