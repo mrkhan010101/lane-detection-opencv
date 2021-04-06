@@ -1,7 +1,7 @@
 import numpy as np
 # from sklearn.linear_model import LinearRegression
 # Rapid Action in Directions
-# from showDirections import say_directions
+from showDirections import say_directions
 
 def make_cordinates(image, parameter):
     try:
@@ -10,8 +10,7 @@ def make_cordinates(image, parameter):
         y2 = int(y1*(3.5/5))
         x1 = int((y1 - intercept)/slope)
         x2 = int((y2 - intercept)/slope)
-    except Exception as f:
-        print(f)
+    except Exception:
         slope, intercept = 0, 0
     return np.array([x1, y1, x2, y2])
 def combo_lines(lane_image, lines):
@@ -26,6 +25,8 @@ def combo_lines(lane_image, lines):
             # print(para)
             slope = para[0]
             intercept = para[1]
+            # print(slope)
+            # print(intercept)
             if slope < 0:
                 left_lane.append((slope, intercept))
             else:
@@ -35,7 +36,7 @@ def combo_lines(lane_image, lines):
         left_line = make_cordinates(lane_image, left_avg)
         right_line = make_cordinates(lane_image, right_avg)
         # print(left_line,"<< left|| right>>", right_line) # it was working
-        # say_directions(left_avg, right_avg, lane_image)
+        say_directions(left_avg, right_avg, lane_image)
         if(left_line == None):
             left_line = temp_left.copy()
             print('it was none')
@@ -43,6 +44,6 @@ def combo_lines(lane_image, lines):
             temp_left = left_line.copy()
         
     except Exception as e:
-        print(e)
-        # pass
+        # print(e)
+        pass
     return np.array([left_line, right_line])

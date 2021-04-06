@@ -28,11 +28,11 @@ def capture(img):
     blur = cv2.GaussianBlur(hsv, (5, 5), 0)
     edges = cv2.Canny(blur, 50, 150)
     aoi = area_of_interest(edges)
-    lines = cv2.HoughLinesP(aoi, 2, np.pi/180, 100, np.array([]), 40, 20)
-    # avg_lines= combo_lines(lane_image, lines)
-    clines = show_lines(lane_image, lines)
+    lines = cv2.HoughLinesP(aoi, 1, np.pi/180, 100, np.array([]), 20, 10)
+    avg_lines= combo_lines(lane_image, lines)
+    clines = show_lines(lane_image, avg_lines)
     color_image_line = cv2.addWeighted(lane_image, 0.8, clines, 1, 1)
-    return aoi
+    return color_image_line
 def image():
     status = glob.glob('test_images/*.jpg')
     if(status):
@@ -77,7 +77,7 @@ def video():
                 blur = cv2.GaussianBlur(hsv, (5, 5), 0) # to reduce the noise 
                 edges = cv2.Canny(blur, 50, 150) # to find the edges
                 aoi = area_of_interest_video(edges)
-                lines = cv2.HoughLinesP(aoi, 2, np.pi/180, 100, np.array([]), 40, 5)
+                lines = cv2.HoughLinesP(aoi, 2, np.pi/180, 100, np.array([]), 20, 5)
                 avg_lines= combo_lines(frame, lines)
                 clines = show_lines(frame, avg_lines)
                 color_image_line = cv2.addWeighted(frame, 0.9, clines, 1, 1)
@@ -92,5 +92,5 @@ def video():
     else:
         print('not exist')
 if __name__ == '__main__':
-    image()
-    # video()
+    # image()
+    video()
