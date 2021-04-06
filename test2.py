@@ -1,7 +1,6 @@
 # [ 65 720 469 503] << lef[ 65 720 469 503]t|| right>> [860 720 631 503]
 
 import numpy as np
-<<<<<<< HEAD
 import glob
 import matplotlib.pyplot as plt
 import os.path as path
@@ -133,4 +132,4 @@ print(pred.reshape(1))
 # [ 64 720 448 503] << left|| right>> [853 720 639 503]
 # [ 67 720 453 503] << left|| right>> [848 720 635 503]
 # [ 72 720 459 503] << left|| right>> [855 720 636 503]
->>>>>>> abd7b54536d24dde7741f975fa34578b6c70207b
+
