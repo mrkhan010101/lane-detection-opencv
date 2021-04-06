@@ -29,8 +29,8 @@ def capture(img):
     edges = cv2.Canny(blur, 50, 150)
     aoi = area_of_interest(edges)
     lines = cv2.HoughLinesP(aoi, 1, np.pi/180, 100, np.array([]), 20, 10)
-    avg_lines= combo_lines(lane_image, lines)
-    clines = show_lines(lane_image, avg_lines)
+    # avg_lines= combo_lines(lane_image, lines)
+    clines = show_lines(lane_image, lines)
     color_image_line = cv2.addWeighted(lane_image, 0.8, clines, 1, 1)
     return color_image_line
 def image():
@@ -92,5 +92,5 @@ def video():
     else:
         print('not exist')
 if __name__ == '__main__':
-    # image()
-    video()
+    image()
+    # video()

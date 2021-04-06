@@ -43,7 +43,7 @@ def combo_lines(lane_image, lines):
         else:
             temp_left = left_line.copy()
         
-    except Exception as e:
+    except Exception:
         # print(e)
         pass
     return np.array([left_line, right_line])

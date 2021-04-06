@@ -24,8 +24,7 @@ def video():
     while cap.isOpened():
         _, frame = cap.read()
         prev, fps = showfps(frame, prev, fps)
-        gray = cv2.cvtColor(frame, cv2.COLOR_RGB2GRAY)
-        blur = cv2.GaussianBlur(gray, (5,5), 0)
+        blur = cv2.GaussianBlur(frame, (5,5), 0)
         op = human_detector(blur)
         res = cv2.resize(op, (720, 480))
         cv2.imshow('Human Detection', res)
