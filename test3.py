@@ -8,6 +8,7 @@ from show_combo_lines import combo_lines
 from fps import showfps
 from showDimensions import dims
 from showFilters import filter_colors
+from combo_lines import combo 
 def area_of_interest(img):
     try:
         ht = img.shape[0]
@@ -23,13 +24,13 @@ def area_of_interest(img):
         print(e)
 def capture(img):
     lane_image = np.copy(img)
-    # tmp_hsv = cv2.cvtColor(lane_image, cv2.COLOR_BGR2HLS)
     hsv = filter_colors(lane_image)
     blur = cv2.GaussianBlur(hsv, (5, 5), 0)
     edges = cv2.Canny(blur, 50, 150)
     aoi = area_of_interest(edges)
-    lines = cv2.HoughLinesP(aoi, 1, np.pi/180, 100, np.array([]), 20, 10)
+    lines = cv2.HoughLinesP(aoi, 2, np.pi/180, 30, np.array([]), 100, 180)
     # avg_lines= combo_lines(lane_image, lines)
+    combo(lane_image, lines)
     clines = show_lines(lane_image, lines)
     color_image_line = cv2.addWeighted(lane_image, 0.8, clines, 1, 1)
     return color_image_line
