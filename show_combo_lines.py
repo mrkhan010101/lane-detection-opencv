@@ -21,16 +21,19 @@ def combo_lines(lane_image, lines):
         temp_right = np.array([860, 720, 631, 503])
         for line in lines:
             x1, y1, x2, y2 = line.reshape(4)
-            para = np.polyfit((x1, x2), (y1, y2), 1)
-            # print(para)
-            slope = para[0]
-            intercept = para[1]
-            # print(slope)
-            # print(intercept)
-            if slope < 0:
-                left_lane.append((slope, intercept))
+            if y1 == y2:
+                continue
             else:
-                right_lane.append((slope, intercept))
+                para = np.polyfit((x1, x2), (y1, y2), 1)
+                # print(para)
+                slope = para[0]
+                intercept = para[1]
+                # print(slope)
+                # print(intercept)
+                if slope < 0:
+                    left_lane.append((slope, intercept))
+                else:
+                    right_lane.append((slope, intercept))
         left_avg = np.average(left_lane, axis=0)
         right_avg = np.average(right_lane, axis=0)
         left_line = make_cordinates(lane_image, left_avg)
