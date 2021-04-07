@@ -9,6 +9,7 @@ from fps import showfps
 from showDimensions import dims
 from showFilters import filter_colors
 from combo_lines import combo 
+import matplotlib.pyplot as plt
 def area_of_interest(img):
     try:
         ht = img.shape[0]
@@ -42,10 +43,12 @@ def image():
                 img = cv2.imread(i)
                 x, y = dim(img)
                 cap = capture(img)
-                res = cv2.resize(cap, (x-220, y-220))
-                cv2.imshow('Debug', res)
-                cv2.waitKey(0)
-                cv2.destroyAllWindows()
+                # res = cv2.resize(cap, (x-220, y-220))
+                plt.imshow(cap)
+                plt.show()
+                # cv2.imshow('Debug', res)
+                # cv2.waitKey(0)
+                # cv2.destroyAllWindows()
             except Exception:
                 pass
     else:

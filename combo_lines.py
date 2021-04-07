@@ -16,7 +16,7 @@ def combo(lane_image, lines):
         y2.append(b2)
         para = np.polyfit((a1,a2), (b1,b2), 1)
         slope = para[0]
-        print(slope)
+        # print(slope)
     # df = pd.DataFrame({
     #     "X1": x1,
     #     "Y1": y1,
@@ -26,5 +26,4 @@ def combo(lane_image, lines):
     i = time.time()
     filename = "image %.2f" % i
     print(filename)
-    
-    # df.to_csv(filename)
+    # df.to_csv('%s.csv' %filename)
