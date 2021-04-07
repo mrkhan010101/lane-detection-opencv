@@ -9,8 +9,7 @@ def combo(lane_image, lines):
     x2= []
     y1= []
     y2= []
-    left_lane = []
-    right_lane = []
+    slopes = []
     for line in lines:
         a1, b1, a2, b2 = line.reshape(4)
         if(b1 == b2):
@@ -21,17 +20,17 @@ def combo(lane_image, lines):
             x2.append(a2)
             y2.append(b2)
             para = np.polyfit((a1,a2), (b1,b2), 1)
-            slope = para[0]
+            slopes.append(para[0])
             intercept = para[1]
            
-    df = pd.DataFrame({
-        "X1": x1,
-        "Y1": y1,
-        "X2": x2,
-        "Y2": y2,
-        "SLOPE": slope,
-    })
+    # df = pd.DataFrame({
+    #     "X1": x1,
+    #     "Y1": y1,
+    #     "X2": x2,
+    #     "Y2": y2,
+    #     "SLOPE": slopes,
+    # })
     i = time.time()
     filename = "image %.2f" % i
     print(filename)
-    df.to_csv('%s.csv' %filename)
+    # df.to_csv('%s.csv' %filename)
