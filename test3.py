@@ -2,6 +2,8 @@ import cv2
 import numpy as np
 import glob
 import time
+
+from numpy.core.shape_base import block
 from showImageDimensions import dim
 from showLines import show_lines
 from show_combo_lines import combo_lines
@@ -82,6 +84,7 @@ def video():
                 edges = cv2.Canny(blur, 50, 150) # to find the edges
                 aoi = area_of_interest_video(edges)
                 lines = cv2.HoughLinesP(aoi, 2, np.pi/180, 100, np.array([]), 20, 5)
+                # lines = cv2.HoughLinesP(aoi, 2, np.pi/180, 30, np.array([]), 100, 180)
                 avg_lines= combo_lines(frame, lines)
                 clines = show_lines(frame, avg_lines)
                 color_image_line = cv2.addWeighted(frame, 0.9, clines, 1, 1)
@@ -95,6 +98,32 @@ def video():
         cv2.destroyAllWindows()
     else:
         print('not exist')
+
+def gradient():
+    winsize = (64, 64)
+    # winSize = (64, 64) 
+    blocksize = (16, 16) 
+    blockstride = (8, 8)
+    cellsize = (8, 8)
+    nbins = 9
+    derivaperture =1, 
+    winsigma =4.
+    histogramnorm = 0
+    l2hysthreshold = 2.000000000001e-01
+    gammacorrection=0
+    nlevels=64
+    print('this is hog')
+    hog = cv2.HOGDescriptor(_winSize = winsize, _blockSize = blocksize, _blockStride = blockstride, _cellSize = cellsize, 
+            _nbins=  nbins, _winsigma =winsigma, _histogramNormType = histogramnorm)
+    img = cv2.imread('car/image0000.png')
+    winstride = (8, 8)
+    padding = (8, 8)
+    locaions = ((10, 20), )
+    h = hog.compute(img, winstride, padding, locaions)
+    plt.imshow(h)
+    plt.show()
+
 if __name__ == '__main__':
     # image()
-    video()
+    # video()
+    gradient()
