@@ -1,6 +1,7 @@
 import numpy as np
 import cv2
-
+import matplotlib.pyplot as plt
+from skimage import hog
 def get_hog_features(img, orient, pix_per_cell, cell_per_block, 
                         vis=False, feature_vec=True):
     # Call with two outputs if vis==True

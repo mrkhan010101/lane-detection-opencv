@@ -50,7 +50,8 @@ def for_image():
 def for_video():
     prev = time.time()
     fps = 0.0
-    cap = cv2.VideoCapture('./skate_park.mp4')
+    # cap = cv2.VideoCapture('./skate_park.mp4')
+    cap = cv2.VideoCapture(0)
     while cap.isOpened():
         try:
             _, frame = cap.read()
@@ -73,8 +74,8 @@ def for_video():
     cv2.destroyAllWindows()
 
 def main():
-    for_image()
-    # for_video()
+    # for_image()
+    for_video()
     
 if __name__ == "__main__":
     main()
