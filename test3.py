@@ -127,5 +127,5 @@ def camera():
     cv2.destroyAllWindows()
 if __name__ == '__main__':
     # image()
-    # video()
-    camera()
+    video()
+#     camera()
