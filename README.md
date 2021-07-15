@@ -9,9 +9,6 @@ This is for detecting any lane in the road to identify the road map
 ## SnapShot for Human Detection
 <img src = https://github.com/Aaris-Kazi/lane-detection-opencv/blob/main/human_detect.png>
 
-## SnapShot for showing FPS:
-<img src = https://github.com/Aaris-Kazi/lane-detection-opencv/blob/main/fps.gif>
-
 ## Final Output
 <img src = https://github.com/Aaris-Kazi/lane-detection-opencv/blob/main/final_op.gif>
 
